@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Programme trail &amp; vélo — 12 semaines</title>
+  <title>Programme trail &amp; vélo — paramétrique</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
@@ -317,37 +317,150 @@
       margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em;
     }
     .aa { font-size: 12px; color: var(--text); line-height: 1.55; }
+
+    /* ─── Config panel styles ───────────────────────────────────── */
+    .cfg-card {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+    .cfg-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 22px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .cfg-hdr-text { flex: 1; }
+    .cfg-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 14px; font-weight: 700; color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .cfg-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .cfg-toggle {
+      font-size: 11px; color: var(--muted); border: none;
+      background: none; cursor: pointer; padding: 4px 8px;
+      border-radius: 8px; transition: background 0.15s;
+    }
+    .cfg-toggle:hover { background: var(--sand); }
+    .cfg-body { padding: 0 22px 20px; border-top: 1px solid var(--border); }
+    .cfg-body.collapsed { display: none; }
+    .cfg-section { margin-top: 16px; }
+    .cfg-section-label {
+      font-family: 'Sora', sans-serif;
+      font-size: 10px; font-weight: 600; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px;
+    }
+    .cfg-chips { display: flex; gap: 5px; flex-wrap: wrap; }
+    .chip {
+      padding: 5px 13px; font-size: 12px; font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      border: 1px solid var(--border); border-radius: 999px;
+      background: transparent; color: var(--muted); cursor: pointer;
+      transition: all 0.15s;
+    }
+    .chip:hover { background: var(--sand); color: var(--ink); }
+    .chip.on { background: var(--ink); color: var(--paper); border-color: var(--ink); font-weight: 600; }
+    .sports-list { display: flex; flex-direction: column; gap: 6px; }
+    .sport-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 12px;
+      background: var(--sand); border: 1px solid var(--border);
+      border-radius: 12px; transition: background 0.15s;
+    }
+    .sport-item.unchecked { opacity: 0.5; }
+    .sport-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .sport-label {
+      font-size: 13px; font-weight: 500; color: var(--text);
+      flex: 1; cursor: pointer;
+    }
+    .sport-check-input { cursor: pointer; width: 15px; height: 15px; accent-color: var(--ink); }
+    .sport-order { display: flex; gap: 2px; }
+    .sport-order button {
+      width: 24px; height: 24px; border: 1px solid var(--border);
+      border-radius: 6px; background: var(--paper); color: var(--muted);
+      font-size: 10px; cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      transition: all 0.12s;
+    }
+    .sport-order button:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .sport-order button:disabled { opacity: 0.25; cursor: default; }
+    .sport-priority-badge {
+      font-size: 9px; font-weight: 700; color: var(--muted);
+      min-width: 16px; text-align: center;
+    }
   </style>
 </head>
 <body>
 <div class="page">
 
-<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Programme trail et vélo 12 semaines avec Zwift H3 et jalons transformation</h2>
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Programme trail et vélo paramétrique avec Zwift H3 et jalons transformation</h2>
 
 <div class="app">
-<div class="hdr">
-  <div class="hdr-t">Programme trail &amp; vélo — 12 semaines</div>
-  <div class="hdr-s">Relance · Régularité · Performance — Saris H3 + Zwift — Jalons transformation 5 semaines</div>
+
+<!-- ─── Config Card ──────────────────────────────────────────── -->
+<div class="cfg-card">
+  <div class="cfg-hdr" onclick="toggleConfig()">
+    <div class="cfg-hdr-text">
+      <div class="cfg-title">Configurer mon programme</div>
+      <div class="cfg-sub">Durée, jours actifs, sports pratiqués — le programme se régénère automatiquement</div>
+    </div>
+    <button class="cfg-toggle" id="cfg-toggle-btn" onclick="event.stopPropagation();toggleConfig()">▲ Réduire</button>
+  </div>
+  <div class="cfg-body" id="cfg-body">
+
+    <!-- Row 1: Durée -->
+    <div class="cfg-section">
+      <div class="cfg-section-label">Durée du programme</div>
+      <div class="cfg-chips" id="chips-weeks"></div>
+    </div>
+
+    <!-- Row 2: Jours actifs -->
+    <div class="cfg-section">
+      <div class="cfg-section-label">Jours actifs / semaine</div>
+      <div class="cfg-chips" id="chips-days"></div>
+    </div>
+
+    <!-- Row 3: Sports -->
+    <div class="cfg-section">
+      <div class="cfg-section-label">Sports pratiqués (prioriser du plus au moins important)</div>
+      <div class="sports-list" id="sports-list"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ─── Header ──────────────────────────────────────────────── -->
+<div class="hdr" id="main-hdr">
+  <div class="hdr-t" id="hdr-title">Programme trail &amp; vélo — 12 semaines</div>
+  <div class="hdr-s" id="hdr-sub">Relance · Régularité · Performance — Saris H3 + Zwift — Jalons transformation 5 semaines</div>
 </div>
 
 <div class="krow">
-  <div class="kc"><div class="kl">Durée</div><div class="kv">12 semaines</div></div>
-  <div class="kc"><div class="kl">Phases</div><div class="kv">3 × 4 sem.</div></div>
-  <div class="kc"><div class="kl">Jours actifs</div><div class="kv">6 / semaine</div></div>
-  <div class="kc"><div class="kl">Home trainer</div><div class="kv">Saris H3 + Zwift</div></div>
+  <div class="kc"><div class="kl">Durée</div><div class="kv" id="kv-duree">12 semaines</div></div>
+  <div class="kc"><div class="kl">Phases</div><div class="kv" id="kv-phases">3 × 4 sem.</div></div>
+  <div class="kc"><div class="kl">Jours actifs</div><div class="kv" id="kv-jours">6 / semaine</div></div>
+  <div class="kc"><div class="kl">Sports clés</div><div class="kv" id="kv-sports">CAP + Vélo</div></div>
 </div>
 
-<div class="nav">
-  <button class="nt on" onclick="st('semaine',this)">Semaine type</button>
-  <button class="nt" onclick="st('zwift',this)">Zwift H3</button>
-  <button class="nt" onclick="st('renfo',this)">Renfo A &amp; B</button>
+<div class="nav" id="main-nav">
+  <button class="nt on" id="tab-semaine" onclick="st('semaine',this)">Semaine type</button>
+  <button class="nt" id="tab-zwift" onclick="st('zwift',this)">Zwift H3</button>
+  <button class="nt" id="tab-renfo" onclick="st('renfo',this)">Renfo A &amp; B</button>
   <button class="nt" onclick="st('transfo',this)">Jalons 5 sem.</button>
   <button class="nt" onclick="st('zones',this)">Zones</button>
   <button class="nt" onclick="st('adapt',this)">Adaptations</button>
 </div>
 
 <div id="p-semaine" class="pnl on">
-  <div class="phr">
+  <div class="phr" id="ph-semaine">
     <button class="pb on" onclick="sw(1,this)">Phase 1 — Relance</button>
     <button class="pb" onclick="sw(2,this)">Phase 2 — Régularité</button>
     <button class="pb" onclick="sw(3,this)">Phase 3 — Performance</button>
@@ -373,228 +486,763 @@
 <div id="p-transfo" class="pnl"><div id="tc" class="tl"></div></div>
 <div id="p-zones"   class="pnl"><div id="zn"></div></div>
 <div id="p-adapt"   class="pnl"><div id="ac"></div></div>
-</div>
 
-</div>
+</div><!-- /.app -->
+</div><!-- /.page -->
 
 <script>
-const WK={1:[
-{d:'Lundi',s:'Midi / 20h',b:[['bc','CAP trail']],m:'35 min Z1-Z2 — sentiers plats, run/marche ok',x:'Moulin Blanc ou bord de mer. Plaisir avant perf.'},
-{d:'Mardi',s:'20h30',b:[['br','Renfo A'],['bz','Zwift opt.']],m:'Séance A — bas du corps + gainage (40 min)',x:'Zwift Just Spin 20 min Z1 si énergie après renfo.'},
-{d:'Mercredi',s:'Journée',b:[['bv','Vélotaf 34 km']],m:'Endurance Z1-Z2 — séance entière comptabilisée',x:'Pas de Zwift le soir : récupération obligatoire.'},
-{d:'Jeudi',s:'20h30',b:[['br','Renfo B'],['bz','Zwift Z1']],m:'Séance B — haut du corps (35 min) + Zwift 20 min',x:'Endurance ride, no intensity. Ou Zwift seul si renfo sauté.'},
-{d:'Vendredi',s:'20h30',b:[['bz','Zwift structuré']],m:'Active Recovery 35 min — 56-64% FTP',x:'Workouts > Recovery. Pas de renfo ce soir.'},
-{d:'Samedi',s:'Sport enfants',b:[['bc','CAP trail']],m:'45 min trail — sentiers autour de Brest',x:'Créneau parallèle sport des enfants.'},
-{d:'Dimanche',s:'Matin',b:[['bl','Sortie longue']],m:'60-75 min trail Z2 ou 1h30 vélo route',x:'1 dim/2 : alterner trail / vélo selon envie.'},
-],2:[
-{d:'Lundi',s:'Midi / 20h',b:[['bc','CAP trail']],m:'40 min — fractionné 6×1 min Z4 / 2 min Z1',x:'Amorce intensité. Sentiers avec D+.'},
-{d:'Mardi',s:'20h30',b:[['br','Renfo A+'],['bz','Zwift opt.']],m:'Séance A+ — 4 séries, charges +2-4 kg (45 min)',x:'Zwift 20 min Z1 si < 21h et énergie suffisante.'},
-{d:'Mercredi',s:'Journée',b:[['bv','Vélotaf 34 km']],m:'Avec 2×10 min blocs Z3 intégrés au retour',x:'Vélotaf semi-structuré.'},
-{d:'Jeudi',s:'20h30',b:[['br','Renfo B+'],['bz','Zwift Z2']],m:'Séance B+ (40 min) + Zwift 25 min Z1-Z2',x:'Double soir le plus chargé — surveiller la fatigue.'},
-{d:'Vendredi',s:'20h30',b:[['bz','Sweet Spot']],m:'Sweet Spot Court 40 min — 88-93% FTP',x:'Re-test FTP en début S5. Séance clé aérobie.'},
-{d:'Samedi',s:'Sport enfants',b:[['bc','CAP trail']],m:'50 min trail D+ — Landerneau / Cranou',x:'D+ > 100 m par sortie.'},
-{d:'Dimanche',s:'Matin',b:[['bl','Sortie longue']],m:'90 min trail Z2 ou 2h vélo route',x:'1 dim/2 : trail long / vélo côtes. Gran fondo prep.'},
-],3:[
-{d:'Lundi',s:'Midi / 20h',b:[['bc','CAP intensif']],m:'45 min — 3×8 min Z4 seuil ou tempo D+',x:'Séance qualitative CAP clé de la semaine.'},
-{d:'Mardi',s:'20h30',b:[['br','Renfo A perf']],m:'Plyométrie + charges max (45 min)',x:'Zwift si énergie suffisante après.'},
-{d:'Mercredi',s:'Journée',b:[['bv','Vélotaf structuré']],m:'34 km avec 3×5 min Z4-Z5 intégrés au retour',x:'Vélotaf = séance de qualité.'},
-{d:'Jeudi',s:'20h30',b:[['br','Renfo B perf'],['bz','Zwift Z1']],m:'Séance B lourde (45 min) + Zwift 20 min Z1',x:'10 min mobilité avant Zwift.'},
-{d:'Vendredi',s:'20h30',b:[['bz','VO2max']],m:'VO2max 40-45 min — 5×3 min à 110-120% FTP',x:'The Wringer ou Emerge. Dormir 7h+ avant dim.'},
-{d:'Samedi',s:'Sport enfants',b:[['bc','CAP technique'],['bl','BRM prep']],m:'1h trail D+ ou vélo 1h30 avec côtes',x:'Option S11-S12 : simulation BRM / gran fondo.'},
-{d:'Dimanche',s:'Matin',b:[['bl','Sortie race-pace']],m:'2h trail Z2-Z3 ou 3h vélo — 30 min allure cible',x:'Simulation conditions compétition / BRM.'},
-]};
+/* ═══════════════════════════════════════════════════════════
+   CONFIG STATE
+═══════════════════════════════════════════════════════════ */
+let CFG = {
+  weeks: 12,
+  activeDays: 6,
+  allSports: [
+    { id: 'cap_trail',    label: 'CAP / Trail',         checked: true  },
+    { id: 'velo_outdoor', label: 'Vélo extérieur',       checked: true  },
+    { id: 'velo_indoor',  label: 'Home trainer / Zwift', checked: true  },
+    { id: 'renfo',        label: 'Renforcement',         checked: true  },
+    { id: 'natation',     label: 'Natation',             checked: false },
+    { id: 'marche',       label: 'Rando / Marche',       checked: false },
+  ],
+};
 
-const ZW={1:[
-{n:'Ramp Test FTP',w:'S1 — vendredi',d:'30 min',i:'Obligatoire. Workouts > FTP Tests > Ramp Test. Ce chiffre calibre toutes les zones pour 12 semaines. Note-le.'},
-{n:'Just Spin / Recovery',w:'Mardi après renfo (opt.)',d:'20 min',i:'Z1 pur < 130 W ou < 60% FTP. Pas de structure. Active la circulation sans fatigue.'},
-{n:'Endurance Ride Z2',w:'Jeudi après renfo B',d:'25-30 min',i:'Workouts > Endurance > Long Slow Distance. 65-75% FTP strict. Ne pas dépasser Z2. Levier principal perte de poids.'},
-{n:'Active Recovery',w:'Vendredi soir',d:'35 min',i:'Workouts > Recovery > Active Recovery. 56-64% FTP. Phase 1 reste légère. Prépare le week-end sans fatigue.'},
-],2:[
-{n:'Ramp Test — re-test',w:'Vendredi S5',d:'30 min',i:'Gain attendu +5 à 12 W vs S1. Premier marqueur vélo concret. Pas de gain = augmenter Z2, pas l\'intensité.'},
-{n:'Sweet Spot Court',w:'Vendredi (sem. paires)',d:'40 min',i:'Workouts > Gorby ou Sweet Spot Short. 2×10 min à 88-93% FTP. Séance clé développement aérobie gran fondo.'},
-{n:'Threshold Short',w:'Jeudi après renfo B',d:'25 min',i:'3×5 min à 95-100% FTP, récup 3 min. Puissant pour les adaptations cardiovasculaires.'},
-{n:'Zwift Race — Cat. D/E',w:'Vendredi (sem. impaires)',d:'35-45 min',i:'Events > Racing. La dynamique de groupe tire vers Z4-Z5 naturellement. Très efficace.'},
-],3:[
-{n:'Ramp Test — final',w:'Vendredi S9',d:'30 min',i:'3e test. Progression attendue +15 à 25 W vs S1. Niveau objectif avant gran fondo ou BRM.'},
-{n:'VO2max Intervals',w:'Vendredi (sem. paires)',d:'40 min',i:'Workouts > The Wringer ou Emerge. 5×3 min à 110-120% FTP, récup 3 min. Bonne nutrition la veille.'},
-{n:'Gran Fondo Simulation',w:'1 dim/2 — rem. sortie longue',d:'90-120 min',i:'Route libre. 60 min à Tempo 76-87% FTP. Teste la nutrition à l\'effort. Idéal 2-3 sem. avant épreuve.'},
-{n:'Zwift Race — Cat. C/D',w:'Vendredi (sem. impaires)',d:'40 min',i:'FTP améliorée = cat. C/D solide. Intensité impossible à simuler seul. Marqueur de progression.'},
-]};
+/* ═══════════════════════════════════════════════════════════
+   STATIC DATA — Zones, Renfo, Zwift (unchanged)
+═══════════════════════════════════════════════════════════ */
+const ZONES = [
+  {z:'Z1',n:'Récupération active',col:'#7D9A83',v:'< 56% FTP',c:'< 60% FC max',r:'Très facile, conversation aisée'},
+  {z:'Z2',n:'Endurance de base',col:'#4A7C9E',v:'56-75% FTP',c:'60-70% FC max',r:'Facile, phrases complètes'},
+  {z:'Z3',n:'Tempo',col:'#C49A2E',v:'76-87% FTP',c:'70-80% FC max',r:'Modéré, phrases courtes'},
+  {z:'Z4',n:'Seuil / Sweet Spot',col:'#D9824B',v:'88-105% FTP',c:'80-90% FC max',r:'Difficile, quelques mots'},
+  {z:'Z5',n:'VO2max',col:'#B85C4A',v:'106-120% FTP',c:'90-100% FC max',r:'Très difficile, impossible parler'},
+];
 
-const RF={1:{A:[
-{e:'Goblet squat',s:'3×12',c:'KB 12 kg',n:'Descente 3s, pause basse 1s'},
-{e:'Fente avant alternée',s:'3×10/côté',c:'Haltères 6 kg',n:'Genou 2 cm du sol'},
-{e:'Pont fessier',s:'3×15',c:'Corps',n:'1s en haut, serrer les fessiers'},
-{e:'Deadlift roumain KB',s:'3×12',c:'KB 16 kg',n:'Charnière hanches, dos droit'},
-{e:'Gainage planche',s:'3×30s',c:'—',n:'Antéversion nulle, respiration'},
-{e:'Gainage latéral',s:'3×25s/côté',c:'—',n:'Bassin neutre'},
+const RF = {1:{A:[
+  {e:'Goblet squat',s:'3×12',c:'KB 12 kg',n:'Descente 3s, pause basse 1s'},
+  {e:'Fente avant alternée',s:'3×10/côté',c:'Haltères 6 kg',n:'Genou 2 cm du sol'},
+  {e:'Pont fessier',s:'3×15',c:'Corps',n:'1s en haut, serrer les fessiers'},
+  {e:'Deadlift roumain KB',s:'3×12',c:'KB 16 kg',n:'Charnière hanches, dos droit'},
+  {e:'Gainage planche',s:'3×30s',c:'—',n:'Antéversion nulle, respiration'},
+  {e:'Gainage latéral',s:'3×25s/côté',c:'—',n:'Bassin neutre'},
 ],B:[
-{e:'Rowing haltères',s:'3×12',c:'Haltères 8 kg',n:'Coude serré, omoplate en fin'},
-{e:'Développé haltères',s:'3×12',c:'Haltères 8 kg',n:'Coudes à 45°'},
-{e:'Tirage élastique face',s:'3×15',c:'Élastique moyen',n:'Rétraction scapulaire'},
-{e:'Curl biceps',s:'3×12',c:'Haltères 7 kg',n:'Supination complète'},
-{e:'Gainage latéral dyn.',s:'3×20s/côté',c:'—',n:'Montée/descente lente'},
-{e:'Superman',s:'3×12',c:'—',n:'Tenue 2s en haut'},
+  {e:'Rowing haltères',s:'3×12',c:'Haltères 8 kg',n:'Coude serré, omoplate en fin'},
+  {e:'Développé haltères',s:'3×12',c:'Haltères 8 kg',n:'Coudes à 45°'},
+  {e:'Tirage élastique face',s:'3×15',c:'Élastique moyen',n:'Rétraction scapulaire'},
+  {e:'Curl biceps',s:'3×12',c:'Haltères 7 kg',n:'Supination complète'},
+  {e:'Gainage latéral dyn.',s:'3×20s/côté',c:'—',n:'Montée/descente lente'},
+  {e:'Superman',s:'3×12',c:'—',n:'Tenue 2s en haut'},
 ]},2:{A:[
-{e:'Goblet squat',s:'4×10',c:'KB 16 kg',n:'Pause basse 2s'},
-{e:'Squat bulgare',s:'3×10/côté',c:'Haltères 8 kg',n:'Remplace la fente'},
-{e:'Pont fessier unilatéral',s:'3×12/côté',c:'Corps',n:'Single-leg progression'},
-{e:'Deadlift roumain KB',s:'4×10',c:'KB 20 kg',n:'Charge +4 kg vs P1'},
-{e:'Planche dynamique',s:'3×40s',c:'—',n:'Leg raise ou shoulder tap'},
-{e:'Gainage latéral + rotation',s:'3×30s/côté',c:'—',n:'Rotation épaule vers bas'},
+  {e:'Goblet squat',s:'4×10',c:'KB 16 kg',n:'Pause basse 2s'},
+  {e:'Squat bulgare',s:'3×10/côté',c:'Haltères 8 kg',n:'Remplace la fente'},
+  {e:'Pont fessier unilatéral',s:'3×12/côté',c:'Corps',n:'Single-leg progression'},
+  {e:'Deadlift roumain KB',s:'4×10',c:'KB 20 kg',n:'Charge +4 kg vs P1'},
+  {e:'Planche dynamique',s:'3×40s',c:'—',n:'Leg raise ou shoulder tap'},
+  {e:'Gainage latéral + rotation',s:'3×30s/côté',c:'—',n:'Rotation épaule vers bas'},
 ],B:[
-{e:'Rowing haltères',s:'4×10',c:'Haltères 12 kg',n:'Plus lourd, gainage dorsal'},
-{e:'Développé haltères',s:'4×10',c:'Haltères 12 kg',n:'4e série proche de l\'échec'},
-{e:'Tirage élastique',s:'4×12',c:'Élastique fort',n:'Plus résistant'},
-{e:'Face pull élastique',s:'3×15',c:'Élastique moyen',n:'Rotateurs externes'},
-{e:'Pallof press',s:'3×12/côté',c:'Élastique',n:'Anti-rotation — clé vélo'},
-{e:'Bird-dog',s:'3×10/côté',c:'—',n:'Stabilité lombaire'},
+  {e:'Rowing haltères',s:'4×10',c:'Haltères 12 kg',n:'Plus lourd, gainage dorsal'},
+  {e:'Développé haltères',s:'4×10',c:'Haltères 12 kg',n:"4e série proche de l'échec"},
+  {e:'Tirage élastique',s:'4×12',c:'Élastique fort',n:'Plus résistant'},
+  {e:'Face pull élastique',s:'3×15',c:'Élastique moyen',n:'Rotateurs externes'},
+  {e:'Pallof press',s:'3×12/côté',c:'Élastique',n:'Anti-rotation — clé vélo'},
+  {e:'Bird-dog',s:'3×10/côté',c:'—',n:'Stabilité lombaire'},
 ]},3:{A:[
-{e:'Squat KB double',s:'4×8',c:'2× KB 16 kg',n:'Montée explosive'},
-{e:'Squat bulgare lesté',s:'4×8/côté',c:'Haltères 12 kg',n:'Charge max Phase 3'},
-{e:'Pont fessier unilat. lesté',s:'3×10/côté',c:'Haltère 10 kg',n:'Stabilité pelvienne'},
-{e:'Deadlift KB unilatéral',s:'3×10/côté',c:'KB 20 kg',n:'Balance + force unijambe'},
-{e:'Box jump (sur marche)',s:'3×8',c:'—',n:'Atterrissage amorti'},
-{e:'Planche lestée',s:'3×45s',c:'Haltère 5 kg sur dos',n:'Progression finale'},
+  {e:'Squat KB double',s:'4×8',c:'2× KB 16 kg',n:'Montée explosive'},
+  {e:'Squat bulgare lesté',s:'4×8/côté',c:'Haltères 12 kg',n:'Charge max Phase 3'},
+  {e:'Pont fessier unilat. lesté',s:'3×10/côté',c:'Haltère 10 kg',n:'Stabilité pelvienne'},
+  {e:'Deadlift KB unilatéral',s:'3×10/côté',c:'KB 20 kg',n:'Balance + force unijambe'},
+  {e:'Box jump (sur marche)',s:'3×8',c:'—',n:'Atterrissage amorti'},
+  {e:'Planche lestée',s:'3×45s',c:'Haltère 5 kg sur dos',n:'Progression finale'},
 ],B:[
-{e:'Rowing unilat. lourd',s:'4×8/côté',c:'Haltère 18 kg',n:'Épuisement 4e série'},
-{e:'Push-up lesté',s:'4×8',c:'Haltère 5 kg en sac',n:'Ou pieds surélevés'},
-{e:'Tirage élastique + rotation',s:'3×12/côté',c:'Élastique fort',n:'Plan transversal'},
-{e:'Développé militaire',s:'3×10',c:'Haltères 10 kg',n:'Debout — stabilité max'},
-{e:'Pallof press + overhead',s:'3×10/côté',c:'Élastique fort',n:'Enchaînement complexe'},
-{e:'Turkish get-up',s:'2×3/côté',c:'KB 12 kg',n:'Finisher total'},
+  {e:'Rowing unilat. lourd',s:'4×8/côté',c:'Haltère 18 kg',n:'Épuisement 4e série'},
+  {e:'Push-up lesté',s:'4×8',c:'Haltère 5 kg en sac',n:'Ou pieds surélevés'},
+  {e:'Tirage élastique + rotation',s:'3×12/côté',c:'Élastique fort',n:'Plan transversal'},
+  {e:'Développé militaire',s:'3×10',c:'Haltères 10 kg',n:'Debout — stabilité max'},
+  {e:'Pallof press + overhead',s:'3×10/côté',c:'Élastique fort',n:'Enchaînement complexe'},
+  {e:'Turkish get-up',s:'2×3/côté',c:'KB 12 kg',n:'Finisher total'},
 ]}};
 
-const TR=[
-{w:'S1-S2',t:'Activation neuromusculaire',col:'#5A7A60',bg:'#E0EAE2',tc:'#3B5E40',pts:[
-{txt:'Courbatures normales J1-5 — signe de recrutement actif',hi:false},
-{txt:'FC repos commence à descendre — mesurer chaque matin',hi:false},
-{txt:'Tonicité dans les quadriceps perceptible fin S2',hi:true},
-{txt:'Appuis trail et cheville plus stables',hi:false},
-{txt:'FTP Zwift ramp test S1 — noter le chiffre de base',hi:true},
-]},
-{w:'S3',t:'Première visibilité physique',col:'#1D5060',bg:'#DCE8EA',tc:'#1D4060',pts:[
-{txt:'Tonicité jambes visible au miroir — quads et mollets',hi:true},
-{txt:'Épaules plus larges grâce au renfo B',hi:true},
-{txt:'Perte 1 à 1,5 kg si alimentation structurée',hi:false},
-{txt:'Ventre moins gonflé — rétention d\'eau disparaît',hi:true},
-{txt:'CAP 35 min sans marche tenue en fin de S3',hi:false},
-]},
-{w:'S4',t:'Premier bilan chiffré',col:'#12263A',bg:'#E4E9EF',tc:'#12263A',pts:[
-{txt:'Photo comparaison S1 vs S4 — même cadrage et lumière',hi:true},
-{txt:'Tour de taille : perte attendue 1-2 cm',hi:true},
-{txt:'Poids : -1,5 à 2,5 kg vs S1 (variable)',hi:false},
-{txt:'Zwift : même effort ressenti = puissance supérieure',hi:false},
-{txt:'Renfo : goblet squat à 16 kg minimum propre',hi:true},
-]},
-{w:'S5',t:'Point de bascule — régularité installée',col:'#B5622E',bg:'#FAE9D9',tc:'#8A4318',pts:[
-{txt:'Entourage commence à remarquer — motivation clé',hi:true},
-{txt:'FTP re-test Zwift : +5 à 12 W attendus vs S1',hi:true},
-{txt:'Vêtements : une taille de pantalon plus libre',hi:true},
-{txt:'Énergie journalière nettement améliorée',hi:false},
-{txt:'30 jours tenus — régularité neurologiquement installée',hi:true},
-]},
-];
+const ZW_STATIC = {1:[
+  {n:'Ramp Test FTP',w:'S1 — vendredi',d:'30 min',i:'Obligatoire. Workouts > FTP Tests > Ramp Test. Ce chiffre calibre toutes les zones pour 12 semaines. Note-le.'},
+  {n:'Just Spin / Recovery',w:'Mardi après renfo (opt.)',d:'20 min',i:'Z1 pur < 130 W ou < 60% FTP. Pas de structure. Active la circulation sans fatigue.'},
+  {n:'Endurance Ride Z2',w:'Jeudi après renfo B',d:'25-30 min',i:'Workouts > Endurance > Long Slow Distance. 65-75% FTP strict. Ne pas dépasser Z2. Levier principal perte de poids.'},
+  {n:'Active Recovery',w:'Vendredi soir',d:'35 min',i:'Workouts > Recovery > Active Recovery. 56-64% FTP. Phase 1 reste légère. Prépare le week-end sans fatigue.'},
+],2:[
+  {n:'Ramp Test — re-test',w:'Vendredi S5',d:'30 min',i:'Gain attendu +5 à 12 W vs S1. Premier marqueur vélo concret. Pas de gain = augmenter Z2, pas l\'intensité.'},
+  {n:'Sweet Spot Court',w:'Vendredi (sem. paires)',d:'40 min',i:'Workouts > Gorby ou Sweet Spot Short. 2×10 min à 88-93% FTP. Séance clé développement aérobie gran fondo.'},
+  {n:'Threshold Short',w:'Jeudi après renfo B',d:'25 min',i:'3×5 min à 95-100% FTP, récup 3 min. Puissant pour les adaptations cardiovasculaires.'},
+  {n:'Zwift Race — Cat. D/E',w:'Vendredi (sem. impaires)',d:'35-45 min',i:'Events > Racing. La dynamique de groupe tire vers Z4-Z5 naturellement. Très efficace.'},
+],3:[
+  {n:'Ramp Test — final',w:'Vendredi S9',d:'30 min',i:'3e test. Progression attendue +15 à 25 W vs S1. Niveau objectif avant gran fondo ou BRM.'},
+  {n:'VO2max Intervals',w:'Vendredi (sem. paires)',d:'40 min',i:'Workouts > The Wringer ou Emerge. 5×3 min à 110-120% FTP, récup 3 min. Bonne nutrition la veille.'},
+  {n:'Gran Fondo Simulation',w:'1 dim/2 — rem. sortie longue',d:'90-120 min',i:'Route libre. 60 min à Tempo 76-87% FTP. Teste la nutrition à l\'effort. Idéal 2-3 sem. avant épreuve.'},
+  {n:'Zwift Race — Cat. C/D',w:'Vendredi (sem. impaires)',d:'40 min',i:'FTP améliorée = cat. C/D solide. Intensité impossible à simuler seul. Marqueur de progression.'},
+]};
 
-const AD=[
-{t:'Vélotaf impossible (météo)',a:'Zwift structuré 45-60 min sur le H3 — Sweet Spot ou Endurance selon la phase. Le H3 garantit que cette compensation ne peut jamais être annulée pour cause météo.'},
-{t:'Midi sauté (réunion, imprévu)',a:'CAP décalée à 20h en remplacement du renfo, OU renfo raccourci 25 min (garder les charges, supprimer le gainage). CAP prioritaire si une seule option.'},
-{t:'Double blocage soir',a:'Zwift 20 min Z1 uniquement sur le H3. Maintenir le rythme circadien d\'activité est plus important que la qualité de la séance.'},
-{t:'Fatigue élevée — FC repos +5 bpm',a:'Zwift Z1 uniquement 20 min, < 60% FTP. Zéro renfo. S\'entraîner sur fatigue profonde induit des blessures, pas des adaptations.'},
-{t:'Douleur genou / cheville en CAP',a:'Stopper CAP. Zwift Z1 (le vélo ne sollicite pas les mêmes tendons). Renfo : supprimer squats, garder ponts fessiers. Réévaluer après 48h.'},
-{t:'Semaine chargée — minimum vital',a:'Conserver : 1 renfo + vélotaf + 1 Zwift soir = 3 créneaux actifs. Le H3 garantit que le Zwift ne peut jamais être annulé pour cause météo.'},
-];
+/* ═══════════════════════════════════════════════════════════
+   ACTIVITY TEMPLATES
+═══════════════════════════════════════════════════════════ */
+const TEMPLATES = {
+  cap_trail: {
+    main: [
+      {b:[['bc','CAP trail']], m:'35 min Z1-Z2 — sentiers plats, run/marche ok', x:'Plaisir avant perf.'},
+      {b:[['bc','CAP trail']], m:'40 min — fractionné 6×1 min Z4 / 2 min Z1', x:'Amorce intensité. Sentiers avec D+.'},
+      {b:[['bc','CAP intensif']], m:'45 min — 3×8 min Z4 seuil ou tempo D+', x:'Séance qualitative CAP clé de la semaine.'}
+    ],
+    secondary: [
+      {b:[['bc','CAP trail']], m:'45 min trail — sentiers locaux', x:'Créneau parallèle.'},
+      {b:[['bc','CAP trail']], m:'50 min trail D+ — relief varié', x:'D+ > 100 m par sortie.'},
+      {b:[['bc','CAP technique']], m:'1h trail D+ ou prépa objectif', x:'Option simulation course.'}
+    ],
+    long: [
+      {b:[['bl','Sortie longue']], m:'60-75 min trail Z2 ou 1h30 vélo route', x:'1 dim/2 : alterner.'},
+      {b:[['bl','Sortie longue']], m:'90 min trail Z2 ou 2h vélo route', x:'Gran fondo prep.'},
+      {b:[['bl','Sortie race-pace']], m:'2h trail Z2-Z3 — 30 min allure cible', x:'Simulation compétition.'}
+    ],
+    recovery: [
+      {b:[['bc','CAP Z1']], m:'30 min Z1 — foulée légère', x:'Récupération active.'},
+      {b:[['bc','CAP Z1']], m:'30 min Z1 — footing facile', x:'Récup avant séance clé.'},
+      {b:[['bc','CAP Z1']], m:'30 min Z1 récupération', x:'Dormir 7h+ avant objectif.'}
+    ]
+  },
+  velo_outdoor: {
+    main: [
+      {b:[['bv','Vélotaf']], m:'Vélotaf 34 km — endurance Z1-Z2', x:'Séance entière comptabilisée.'},
+      {b:[['bv','Vélotaf']], m:'Vélotaf 34 km avec 2×10 min blocs Z3', x:'Vélotaf semi-structuré.'},
+      {b:[['bv','Vélotaf structuré']], m:'Vélotaf 34 km avec 3×5 min Z4-Z5', x:'Vélotaf = séance de qualité.'}
+    ],
+    secondary: [
+      {b:[['bv','Vélo ext.']], m:'Sortie vélo 1h — Z1-Z2', x:'Endurance de base.'},
+      {b:[['bv','Vélo ext.']], m:'Sortie vélo 1h15 — Z2 avec reliefs', x:'Progression aérobie.'},
+      {b:[['bv','Vélo ext.']], m:'Sortie vélo 1h30 — Z2-Z3 structuré', x:'Séance qualitative extérieure.'}
+    ],
+    recovery: [
+      {b:[['bv','Vélo Z1']], m:'Vélo facile 40 min — < 65% FTP', x:'Récupération active pédalage léger.'},
+      {b:[['bv','Vélo Z1']], m:'Vélo facile 40 min — récupération', x:'Ne pas forcer le pédalage.'},
+      {b:[['bv','Vélo Z1']], m:'Vélo récup 35 min — très facile', x:'Avant objectif du week-end.'}
+    ],
+    long: [
+      {b:[['bl','Sortie longue']], m:'1h30 vélo route Z2 — plat', x:'Endurance longue.'},
+      {b:[['bl','Sortie longue']], m:'2h vélo route avec montées', x:'Gran fondo prep.'},
+      {b:[['bl','BRM prep']], m:'3h vélo — 30 min allure cible', x:'Simulation BRM.'}
+    ]
+  },
+  velo_indoor: {
+    main: [
+      {b:[['bz','Zwift Z2']], m:'Endurance Ride 25-30 min — 65-75% FTP', x:'Workouts > Long Slow Distance.'},
+      {b:[['bz','Sweet Spot']], m:'Sweet Spot Court 40 min — 88-93% FTP', x:'Workouts > Gorby ou Sweet Spot Short.'},
+      {b:[['bz','VO2max']], m:'VO2max 40 min — 5×3 min à 110-120% FTP', x:'The Wringer ou Emerge.'}
+    ],
+    recovery: [
+      {b:[['bz','Zwift récup']], m:'Active Recovery 35 min — 56-64% FTP', x:'Workouts > Recovery.'},
+      {b:[['bz','Zwift Z2']], m:'Endurance Z2 30 min — 65-75% FTP', x:"Levier aérobie. Pas d'intensité."},
+      {b:[['bz','Zwift Z1']], m:'Récupération active 20 min — < 60% FTP', x:'Avant objectif du week-end.'}
+    ],
+    long: [
+      {b:[['bl','Sortie longue']], m:'1h30 vélo route Z2 ou Zwift 90 min', x:'Endurance longue.'},
+      {b:[['bl','Sortie longue']], m:'2h vélo / Zwift gran fondo simulation', x:'Gran fondo prep.'},
+      {b:[['bl','BRM prep']], m:'3h vélo / Zwift — 30 min allure cible', x:'Simulation BRM.'}
+    ],
+    secondary: [
+      {b:[['bz','Zwift Z2']], m:'Zwift endurance 35 min — Z2', x:'Second cardio de la semaine.'},
+      {b:[['bz','Zwift structuré']], m:'Zwift structuré 40 min — blocs Z3', x:'Progression aérobie.'},
+      {b:[['bz','Zwift tempo']], m:'Zwift tempo 40 min — 76-87% FTP', x:'Séance secondaire qualitative.'}
+    ]
+  },
+  renfo: {
+    a: [
+      {b:[['br','Renfo A']], m:'Séance A — bas du corps + gainage (40 min)', x:'Zwift Z1 optionnel si énergie après.'},
+      {b:[['br','Renfo A+']], m:'Séance A+ — 4 séries, charges +2-4 kg (45 min)', x:'Progresser en charge.'},
+      {b:[['br','Renfo A perf']], m:'Plyométrie + charges max (45 min)', x:'Montée explosive.'}
+    ],
+    b: [
+      {b:[['br','Renfo B']], m:'Séance B — haut du corps (35 min) + cardio 20 min', x:'Endurance ride facile après.'},
+      {b:[['br','Renfo B+']], m:'Séance B+ (40 min) + cardio structuré 25 min', x:'Double soir le plus chargé.'},
+      {b:[['br','Renfo B perf']], m:'Séance B lourde (45 min) + cardio léger', x:'10 min mobilité avant cardio.'}
+    ],
+    main: [
+      {b:[['br','Renfo']], m:'Renforcement complet 40 min', x:'Gainage + charges.'},
+      {b:[['br','Renfo+']], m:'Renforcement 45 min — charges progressives', x:'Progresser en charge.'},
+      {b:[['br','Renfo perf']], m:'Renforcement intensif 45 min', x:'Séance qualitative.'}
+    ],
+    recovery: [
+      {b:[['br','Renfo léger']], m:'Renforcement léger 30 min — mobilité', x:'Stabilité + étirements actifs.'},
+      {b:[['br','Renfo léger']], m:'Renforcement léger 30 min — mobilité', x:'Stabilité + étirements actifs.'},
+      {b:[['br','Renfo léger']], m:'Renforcement léger 30 min — mobilité', x:'Stabilité + étirements actifs.'}
+    ]
+  },
+  natation: {
+    main: [
+      {b:[['bv','Natation']], m:'Natation endurance 45 min — Z1-Z2', x:'Technique + aérobie.'},
+      {b:[['bv','Natation']], m:'Natation 50 min — fractionné 8×50m', x:'Amélioration technique.'},
+      {b:[['bv','Natation']], m:'Natation 55 min — sets intensifs', x:'Récupération active entre séries.'}
+    ],
+    long: [
+      {b:[['bl','Natation longue']], m:'Natation 60 min — Z2 continu', x:'Endurance aquatique.'},
+      {b:[['bl','Natation longue']], m:'Natation 1h — sets progressifs', x:'Progression continue.'},
+      {b:[['bl','Natation longue']], m:'Natation 1h15 — intensité ascendante', x:'Simulation compétition.'}
+    ],
+    recovery: [
+      {b:[['bv','Natation Z1']], m:'Natation 30 min Z1 — récupération', x:'Récupération active.'},
+      {b:[['bv','Natation Z1']], m:'Natation 30 min Z1 — récupération', x:'Récupération active.'},
+      {b:[['bv','Natation Z1']], m:'Natation 30 min Z1 — récupération', x:'Récupération active.'}
+    ],
+    secondary: [
+      {b:[['bv','Natation']], m:'Natation technique 40 min', x:'Focus gestuelle.'},
+      {b:[['bv','Natation']], m:'Natation 45 min — variété de nages', x:'Endurance multi-styles.'},
+      {b:[['bv','Natation']], m:'Natation 50 min — sets mixtes', x:'Prépa compétition.'}
+    ]
+  },
+  marche: {
+    main: [
+      {b:[['bc','Rando']], m:'Randonnée 1h — Z1-Z2', x:'Récupération active.'},
+      {b:[['bc','Rando']], m:'Rando 1h30 avec D+', x:'D+ > 200m.'},
+      {b:[['bc','Rando']], m:'Randonnée technique 2h', x:'Terrain varié.'}
+    ],
+    long: [
+      {b:[['bl','Rando longue']], m:'Randonnée 3h — Z2 terrain varié', x:'Sortie longue fondamentale.'},
+      {b:[['bl','Rando longue']], m:'Randonnée 4h — D+ progressif', x:'Endurance montagne.'},
+      {b:[['bl','Rando longue']], m:'Randonnée 5h — simulation objectif', x:'Prépa terrain cible.'}
+    ],
+    recovery: [
+      {b:[['bc','Marche Z1']], m:'Marche 45 min Z1 — récupération', x:'Récupération active douce.'},
+      {b:[['bc','Marche Z1']], m:'Marche 45 min Z1 — récupération', x:'Récupération active douce.'},
+      {b:[['bc','Marche Z1']], m:'Marche 45 min Z1 — récupération', x:'Récupération active douce.'}
+    ],
+    secondary: [
+      {b:[['bc','Rando']], m:'Rando 1h15 — Z1-Z2', x:'Second créneau marche.'},
+      {b:[['bc','Rando']], m:'Rando 1h30 avec dénivelé', x:'Progression progressive.'},
+      {b:[['bc','Rando']], m:'Randonnée 2h — terrain technique', x:'Renforcement terrains variés.'}
+    ]
+  }
+};
 
-const ZONES=[
-{z:'Z1',n:'Récupération active',col:'#7D9A83',v:'< 56% FTP',c:'< 60% FC max',r:'Très facile, conversation aisée'},
-{z:'Z2',n:'Endurance de base',col:'#4A7C9E',v:'56-75% FTP',c:'60-70% FC max',r:'Facile, phrases complètes'},
-{z:'Z3',n:'Tempo',col:'#C49A2E',v:'76-87% FTP',c:'70-80% FC max',r:'Modéré, phrases courtes'},
-{z:'Z4',n:'Seuil / Sweet Spot',col:'#D9824B',v:'88-105% FTP',c:'80-90% FC max',r:'Difficile, quelques mots'},
-{z:'Z5',n:'VO2max',col:'#B85C4A',v:'106-120% FTP',c:'90-100% FC max',r:'Très difficile, impossible parler'},
-];
+/* Sport badge colors */
+const SPORT_BADGE_COLORS = {
+  cap_trail:    '#7D9A83',
+  velo_outdoor: '#90BCC5',
+  velo_indoor:  '#D9824B',
+  renfo:        '#8E8BC4',
+  natation:     '#90BCC5',
+  marche:       '#7D9A83',
+};
 
-const PH=[
-{t:'Phase 1 — Relance',s:'Sem. 1-4 · Réactivation neuromusculaire · Z1-Z2 · Zwift léger · Charges légères',col:'#12263A'},
-{t:'Phase 2 — Régularité',s:'Sem. 5-8 · Charge progressive · Blocs Z3-Z4 · Sweet Spot Zwift · Race vélo',col:'#1D4A5A'},
-{t:'Phase 3 — Performance',s:'Sem. 9-12 · Plyométrie · Puissance max · VO2max · Simulation compétition',col:'#B5622E'},
-];
+/* ═══════════════════════════════════════════════════════════
+   PHASE & WEEK COMPUTATION
+═══════════════════════════════════════════════════════════ */
+const TC = ['#12263A','#1D4A5A','#B5622E'];
+const DAY_LABELS = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+const DAY_SLOTS  = ['Midi / 20h','20h30','Journée','20h30','20h30','Matin','Matin'];
 
-const TC=['#12263A','#1D4A5A','#B5622E'];
+/* Derived WK generated dynamically */
+let WK = {};
 
-function st(id,btn){
-  document.querySelectorAll('.pnl').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.nt').forEach(b=>b.classList.remove('on'));
-  document.getElementById('p-'+id).classList.add('on');
-  btn.classList.add('on');
+function computePhases() {
+  const w = CFG.weeks;
+  const p1 = Math.floor(w * 0.33);
+  const p2 = Math.floor(w * 0.33);
+  const p3 = w - p1 - p2;
+  const s1e = p1, s2s = p1+1, s2e = p1+p2, s3s = p1+p2+1, s3e = w;
+  return [
+    {t:'Phase 1 — Relance',    s:`Sem. 1-${s1e} · Réactivation neuromusculaire · Z1-Z2 · Zwift léger · Charges légères`,       col:'#12263A', dur:p1},
+    {t:'Phase 2 — Régularité', s:`Sem. ${s2s}-${s2e} · Charge progressive · Blocs Z3-Z4 · Sweet Spot Zwift · Race vélo`,        col:'#1D4A5A', dur:p2},
+    {t:'Phase 3 — Performance',s:`Sem. ${s3s}-${s3e} · Plyométrie · Puissance max · VO2max · Simulation compétition`,           col:'#B5622E', dur:p3},
+  ];
 }
-function sa(g,btn,ph){
-  g.querySelectorAll('.pb').forEach(b=>b.classList.remove('on','b2','b3'));
-  btn.classList.add('on');
-  if(ph===2)btn.classList.add('b2');
-  if(ph===3)btn.classList.add('b3');
-}
-function bg(bs){return bs.map(([k,v])=>`<span class="bd ${k}">${v}</span>`).join('');}
 
-function rw(ph){
-  const p=PH[ph-1],tc=TC[ph-1];
-  let h=`<div class="pban" style="background:${p.col}"><div class="pban-t">${p.t}</div><div class="pban-s">${p.s}</div></div>`;
-  h+=`<div class="tw"><table><thead><tr style="background:${tc}"><th style="width:58px">Jour</th><th style="width:74px">Créneau</th><th style="width:80px">Type</th><th>Activité</th><th style="width:150px">Détail</th></tr></thead><tbody>`;
-  WK[ph].forEach(d=>{h+=`<tr><td style="font-weight:600">${d.d}</td><td style="font-size:11px;color:var(--muted)">${d.s}</td><td>${bg(d.b)}</td><td>${d.m}</td><td style="font-size:11px;color:var(--muted)">${d.x}</td></tr>`;});
-  h+=`</tbody></table></div>`;
-  document.getElementById('wc').innerHTML=h;
+function getActiveSports() {
+  return CFG.allSports.filter(s => s.checked);
 }
-function sw(ph,btn){sa(btn.parentElement,btn,ph);rw(ph);}
 
-function rzw(ph){
-  const tc=TC[ph-1];
-  let h=`<div class="sh">Séances Zwift H3 — phase ${ph}</div><div class="tw"><table><thead><tr style="background:${tc}"><th style="width:140px">Workout</th><th style="width:130px">Créneau</th><th style="width:60px">Durée</th><th>Description</th></tr></thead><tbody>`;
-  ZW[ph].forEach(z=>{h+=`<tr><td style="font-weight:600">${z.n}</td><td style="font-size:11px">${z.w}</td><td><span class="bd bz">${z.d}</span></td><td style="font-size:11px">${z.i}</td></tr>`;});
-  h+=`</tbody></table></div>`;
-  document.getElementById('zc').innerHTML=h;
+function isCardioSport(id) {
+  return id !== 'renfo';
 }
-function sz(ph,btn){sa(btn.parentElement,btn,ph);rzw(ph);}
 
-function rrf(ph){
-  const tc=TC[ph-1];
-  let h='';
-  ['A','B'].forEach(s=>{
-    const tit=s==='A'?'Séance A — Bas du corps + gainage':'Séance B — Haut du corps + gainage latéral';
-    h+=`<div class="sh">${tit}</div><div class="tw"><table><thead><tr style="background:${tc}"><th style="width:150px">Exercice</th><th style="width:90px">Séries</th><th style="width:100px">Charge</th><th>Consigne</th></tr></thead><tbody>`;
-    RF[ph][s].forEach(e=>{h+=`<tr><td style="font-weight:600">${e.e}</td><td>${e.s}</td><td style="font-size:11px">${e.c}</td><td style="font-size:11px">${e.n}</td></tr>`;});
-    h+=`</tbody></table></div>`;
+function getTemplate(sportId, session, phase) {
+  const t = TEMPLATES[sportId];
+  if (!t) return {b:[['bc','?']], m:'Activité', x:''};
+  const arr = t[session] || t.main || t.a;
+  if (!arr) return {b:[['bc','?']], m:'Activité', x:''};
+  return arr[Math.min(phase-1, arr.length-1)];
+}
+
+function resolveSlot(slotType, activeSports, phase) {
+  const cardioSports = activeSports.filter(s => isCardioSport(s.id));
+  const hasRenfo = activeSports.some(s => s.id === 'renfo');
+  const hasVeloIndoor = activeSports.some(s => s.id === 'velo_indoor');
+  const primaryCardio = cardioSports[0];
+  const secondCardio  = cardioSports[1];
+
+  switch(slotType) {
+    case 'main_cardio':
+      if (primaryCardio) return getTemplate(primaryCardio.id, 'main', phase);
+      return getTemplate('cap_trail', 'main', phase);
+
+    case 'main_cardio_2':
+      if (secondCardio) return getTemplate(secondCardio.id, 'main', phase);
+      if (primaryCardio) return getTemplate(primaryCardio.id, 'secondary', phase);
+      return getTemplate('cap_trail', 'secondary', phase);
+
+    case 'secondary_cardio':
+      if (primaryCardio) return getTemplate(primaryCardio.id, 'secondary', phase);
+      return getTemplate('cap_trail', 'secondary', phase);
+
+    case 'recovery_cardio':
+      if (hasVeloIndoor) return getTemplate('velo_indoor', 'recovery', phase);
+      if (primaryCardio) return getTemplate(primaryCardio.id, 'recovery', phase);
+      return getTemplate('cap_trail', 'recovery', phase);
+
+    case 'strength_a':
+      if (hasRenfo) return getTemplate('renfo', 'a', phase);
+      if (secondCardio) return getTemplate(secondCardio.id, 'recovery', phase);
+      if (primaryCardio) return getTemplate(primaryCardio.id, 'recovery', phase);
+      return getTemplate('cap_trail', 'recovery', phase);
+
+    case 'strength_b':
+      if (hasRenfo) return getTemplate('renfo', 'b', phase);
+      if (cardioSports[2]) return getTemplate(cardioSports[2].id, 'recovery', phase);
+      if (primaryCardio) return getTemplate(primaryCardio.id, 'recovery', phase);
+      return getTemplate('cap_trail', 'recovery', phase);
+
+    case 'strength_or_cardio2':
+      if (hasRenfo) return getTemplate('renfo', 'main', phase);
+      if (secondCardio) return getTemplate(secondCardio.id, 'main', phase);
+      if (primaryCardio) return getTemplate(primaryCardio.id, 'secondary', phase);
+      return getTemplate('cap_trail', 'secondary', phase);
+
+    case 'long':
+      if (primaryCardio) return getTemplate(primaryCardio.id, 'long', phase);
+      return getTemplate('cap_trail', 'long', phase);
+
+    default:
+      return getTemplate('cap_trail', 'main', phase);
+  }
+}
+
+/* Day-slot definitions per activeDays count */
+const DAY_SLOT_DEFS = {
+  3: [
+    {dayIdx:0, slot:'main_cardio'},
+    {dayIdx:3, slot:'strength_or_cardio2'},
+    {dayIdx:6, slot:'long'},
+  ],
+  4: [
+    {dayIdx:0, slot:'main_cardio'},
+    {dayIdx:2, slot:'strength_or_cardio2'},
+    {dayIdx:4, slot:'recovery_cardio'},
+    {dayIdx:6, slot:'long'},
+  ],
+  5: [
+    {dayIdx:0, slot:'main_cardio'},
+    {dayIdx:1, slot:'strength_a'},
+    {dayIdx:3, slot:'main_cardio_2'},
+    {dayIdx:5, slot:'secondary_cardio'},
+    {dayIdx:6, slot:'long'},
+  ],
+  6: [
+    {dayIdx:0, slot:'main_cardio'},
+    {dayIdx:1, slot:'strength_a'},
+    {dayIdx:2, slot:'main_cardio_2'},
+    {dayIdx:3, slot:'strength_b'},
+    {dayIdx:4, slot:'recovery_cardio'},
+    {dayIdx:5, slot:'secondary_cardio'},
+  ],
+  7: [
+    {dayIdx:0, slot:'main_cardio'},
+    {dayIdx:1, slot:'strength_a'},
+    {dayIdx:2, slot:'main_cardio_2'},
+    {dayIdx:3, slot:'strength_b'},
+    {dayIdx:4, slot:'recovery_cardio'},
+    {dayIdx:5, slot:'secondary_cardio'},
+    {dayIdx:6, slot:'long'},
+  ],
+};
+
+function generateWeek(phase) {
+  const activeSports = getActiveSports();
+  const defs = DAY_SLOT_DEFS[CFG.activeDays] || DAY_SLOT_DEFS[6];
+  return defs.map(def => {
+    const tpl = resolveSlot(def.slot, activeSports, phase);
+    return {
+      d: DAY_LABELS[def.dayIdx],
+      s: DAY_SLOTS[def.dayIdx],
+      b: tpl.b,
+      m: tpl.m,
+      x: tpl.x,
+    };
   });
-  h+=`<div class="note">Règle de progression : si tu termines la dernière série avec 3-4 reps de réserve, augmenter de 2 kg. Si la technique flanche à la rep 8, descendre de 2 kg.</div>`;
-  document.getElementById('rc').innerHTML=h;
 }
-function sr(ph,btn){sa(btn.parentElement,btn,ph);rrf(ph);}
 
-function rtf(){
-  document.getElementById('tc').innerHTML=TR.map((t,i)=>`
+/* ═══════════════════════════════════════════════════════════
+   TIMELINE — adapt week labels to CFG.weeks
+═══════════════════════════════════════════════════════════ */
+function computeTimeline() {
+  const w = CFG.weeks;
+  const s1 = Math.max(1, Math.round(w * 0.17));
+  const s2 = Math.max(s1+1, Math.round(w * 0.25));
+  const s3 = Math.max(s2+1, Math.round(w * 0.33));
+  const s4 = Math.max(s3+1, Math.round(w * 0.42));
+  return [
+    {w:`S1-S${s1}`,t:'Activation neuromusculaire',col:'#5A7A60',bg:'#E0EAE2',tc:'#3B5E40',pts:[
+      {txt:'Courbatures normales J1-5 — signe de recrutement actif',hi:false},
+      {txt:'FC repos commence à descendre — mesurer chaque matin',hi:false},
+      {txt:'Tonicité dans les quadriceps perceptible fin S'+s1,hi:true},
+      {txt:'Appuis trail et cheville plus stables',hi:false},
+      {txt:'FTP Zwift ramp test S1 — noter le chiffre de base',hi:true},
+    ]},
+    {w:`S${s2}`,t:'Première visibilité physique',col:'#1D5060',bg:'#DCE8EA',tc:'#1D4060',pts:[
+      {txt:'Tonicité jambes visible au miroir — quads et mollets',hi:true},
+      {txt:'Épaules plus larges grâce au renfo B',hi:true},
+      {txt:'Perte 1 à 1,5 kg si alimentation structurée',hi:false},
+      {txt:"Ventre moins gonflé — rétention d'eau disparaît",hi:true},
+      {txt:'CAP 35 min sans marche tenue en fin de S'+s2,hi:false},
+    ]},
+    {w:`S${s3}`,t:'Premier bilan chiffré',col:'#12263A',bg:'#E4E9EF',tc:'#12263A',pts:[
+      {txt:'Photo comparaison S1 vs S'+s3+' — même cadrage et lumière',hi:true},
+      {txt:'Tour de taille : perte attendue 1-2 cm',hi:true},
+      {txt:'Poids : -1,5 à 2,5 kg vs S1 (variable)',hi:false},
+      {txt:"Zwift : même effort ressenti = puissance supérieure",hi:false},
+      {txt:'Renfo : goblet squat à 16 kg minimum propre',hi:true},
+    ]},
+    {w:`S${s4}`,t:'Point de bascule — régularité installée',col:'#B5622E',bg:'#FAE9D9',tc:'#8A4318',pts:[
+      {txt:'Entourage commence à remarquer — motivation clé',hi:true},
+      {txt:'FTP re-test Zwift : +5 à 12 W attendus vs S1',hi:true},
+      {txt:"Vêtements : une taille de pantalon plus libre",hi:true},
+      {txt:'Énergie journalière nettement améliorée',hi:false},
+      {txt:s4+' semaines tenues — régularité neurologiquement installée',hi:true},
+    ]},
+  ];
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ADAPTATIONS — dynamic based on selected sports
+═══════════════════════════════════════════════════════════ */
+function computeAdaptations() {
+  const active = getActiveSports().map(s => s.id);
+  const hasVeloAny = active.includes('velo_outdoor') || active.includes('velo_indoor');
+  const hasCap = active.includes('cap_trail');
+  const hasRenfo = active.includes('renfo');
+
+  const ads = [];
+
+  if (hasVeloAny) {
+    ads.push({t:'Vélotaf impossible (météo)',a:'Zwift structuré 45-60 min sur le H3 — Sweet Spot ou Endurance selon la phase. Le H3 garantit que cette compensation ne peut jamais être annulée pour cause météo.'});
+  }
+  if (hasCap) {
+    ads.push({t:'Midi sauté (réunion, imprévu)',a:'CAP décalée à 20h en remplacement du renfo, OU renfo raccourci 25 min (garder les charges, supprimer le gainage). CAP prioritaire si une seule option.'});
+  }
+  ads.push({t:'Double blocage soir',a:'Zwift 20 min Z1 uniquement sur le H3 si disponible, sinon marche 20 min. Maintenir le rythme circadien d\'activité est plus important que la qualité de la séance.'});
+  ads.push({t:'Fatigue élevée — FC repos +5 bpm',a:'Activité Z1 uniquement 20 min, < 60% FTP ou équivalent CAP. Zéro renfo. S\'entraîner sur fatigue profonde induit des blessures, pas des adaptations.'});
+  if (hasCap) {
+    ads.push({t:'Douleur genou / cheville en CAP',a:'Stopper CAP. Vélo Z1 si disponible (le vélo ne sollicite pas les mêmes tendons). Renfo : supprimer squats, garder ponts fessiers. Réévaluer après 48h.'});
+  }
+  ads.push({t:'Semaine chargée — minimum vital',a:'Conserver au moins 2 créneaux actifs : 1 cardio principal + 1 renfo ou récup active. La régularité compte plus que la charge.'});
+
+  return ads;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER HELPERS
+═══════════════════════════════════════════════════════════ */
+function bg(bs) {
+  return bs.map(([k,v]) => `<span class="bd ${k}">${v}</span>`).join('');
+}
+
+function rw(ph) {
+  const PH = computePhases();
+  const p = PH[ph-1];
+  const tc = TC[ph-1];
+  let h = `<div class="pban" style="background:${p.col}"><div class="pban-t">${p.t}</div><div class="pban-s">${p.s}</div></div>`;
+  h += `<div class="tw"><table><thead><tr style="background:${tc}"><th style="width:58px">Jour</th><th style="width:74px">Créneau</th><th style="width:80px">Type</th><th>Activité</th><th style="width:150px">Détail</th></tr></thead><tbody>`;
+  const days = generateWeek(ph);
+  days.forEach(d => {
+    h += `<tr><td style="font-weight:600">${d.d}</td><td style="font-size:11px;color:var(--muted)">${d.s}</td><td>${bg(d.b)}</td><td>${d.m}</td><td style="font-size:11px;color:var(--muted)">${d.x}</td></tr>`;
+  });
+  h += `</tbody></table></div>`;
+  document.getElementById('wc').innerHTML = h;
+}
+
+function rzw(ph) {
+  const tc = TC[ph-1];
+  let h = `<div class="sh">Séances Zwift H3 — phase ${ph}</div><div class="tw"><table><thead><tr style="background:${tc}"><th style="width:140px">Workout</th><th style="width:130px">Créneau</th><th style="width:60px">Durée</th><th>Description</th></tr></thead><tbody>`;
+  ZW_STATIC[ph].forEach(z => {
+    h += `<tr><td style="font-weight:600">${z.n}</td><td style="font-size:11px">${z.w}</td><td><span class="bd bz">${z.d}</span></td><td style="font-size:11px">${z.i}</td></tr>`;
+  });
+  h += `</tbody></table></div>`;
+  document.getElementById('zc').innerHTML = h;
+}
+
+function rrf(ph) {
+  const tc = TC[ph-1];
+  let h = '';
+  ['A','B'].forEach(s => {
+    const tit = s==='A' ? 'Séance A — Bas du corps + gainage' : 'Séance B — Haut du corps + gainage latéral';
+    h += `<div class="sh">${tit}</div><div class="tw"><table><thead><tr style="background:${tc}"><th style="width:150px">Exercice</th><th style="width:90px">Séries</th><th style="width:100px">Charge</th><th>Consigne</th></tr></thead><tbody>`;
+    RF[ph][s].forEach(e => {
+      h += `<tr><td style="font-weight:600">${e.e}</td><td>${e.s}</td><td style="font-size:11px">${e.c}</td><td style="font-size:11px">${e.n}</td></tr>`;
+    });
+    h += `</tbody></table></div>`;
+  });
+  h += `<div class="note">Règle de progression : si tu termines la dernière série avec 3-4 reps de réserve, augmenter de 2 kg. Si la technique flanche à la rep 8, descendre de 2 kg.</div>`;
+  document.getElementById('rc').innerHTML = h;
+}
+
+function rtf() {
+  const TR = computeTimeline();
+  document.getElementById('tc').innerHTML = TR.map((t,i) => `
   <div class="tlr">
     <div class="tll">
       <div class="tlw">${t.w}</div>
       <div class="tld" style="background:${t.col}"></div>
-      ${i<TR.length-1?`<div class="tlln" style="background:${t.col}"></div>`:''}
+      ${i < TR.length-1 ? `<div class="tlln" style="background:${t.col}"></div>` : ''}
     </div>
     <div class="tlc">
       <div class="tlh" style="background:${t.bg};color:${t.tc}">${t.t}</div>
-      ${t.pts.map(p=>`<div class="tlp${p.hi?' hi':''}"><span style="flex-shrink:0">${p.hi?'◆':'◇'}</span><span>${p.txt}</span></div>`).join('')}
+      ${t.pts.map(p => `<div class="tlp${p.hi?' hi':''}"><span style="flex-shrink:0">${p.hi?'◆':'◇'}</span><span>${p.txt}</span></div>`).join('')}
     </div>
   </div>`).join('');
 }
 
-function rzn(){
-  let h=`<div class="tw"><table style="table-layout:fixed"><thead><tr style="background:#12263A"><th style="width:38px">Zone</th><th style="width:120px">Nom</th><th style="width:95px">Vélo (% FTP)</th><th style="width:100px">CAP (% FC max)</th><th>Ressenti</th></tr></thead><tbody>`;
-  ZONES.forEach(z=>{h+=`<tr><td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${z.col};margin-right:5px;vertical-align:middle"></span><strong>${z.z}</strong></td><td>${z.n}</td><td>${z.v}</td><td>${z.c}</td><td style="font-size:11px">${z.r}</td></tr>`;});
-  h+=`</tbody></table></div><div class="note">Calibrage Zwift : effectuer le Ramp Test dès S1 — Workouts > FTP Tests > Ramp Test. Toutes les zones se règlent automatiquement.</div>`;
-  document.getElementById('zn').innerHTML=h;
+function rzn() {
+  let h = `<div class="tw"><table style="table-layout:fixed"><thead><tr style="background:#12263A"><th style="width:38px">Zone</th><th style="width:120px">Nom</th><th style="width:95px">Vélo (% FTP)</th><th style="width:100px">CAP (% FC max)</th><th>Ressenti</th></tr></thead><tbody>`;
+  ZONES.forEach(z => {
+    h += `<tr><td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${z.col};margin-right:5px;vertical-align:middle"></span><strong>${z.z}</strong></td><td>${z.n}</td><td>${z.v}</td><td>${z.c}</td><td style="font-size:11px">${z.r}</td></tr>`;
+  });
+  h += `</tbody></table></div><div class="note">Calibrage Zwift : effectuer le Ramp Test dès S1 — Workouts > FTP Tests > Ramp Test. Toutes les zones se règlent automatiquement.</div>`;
+  document.getElementById('zn').innerHTML = h;
 }
 
-function rad(){
-  document.getElementById('ac').innerHTML=AD.map(a=>`<div class="ai"><div class="at">Situation : ${a.t}</div><div class="aa">${a.a}</div></div>`).join('');
+function rad() {
+  const AD = computeAdaptations();
+  document.getElementById('ac').innerHTML = AD.map(a =>
+    `<div class="ai"><div class="at">Situation : ${a.t}</div><div class="aa">${a.a}</div></div>`
+  ).join('');
 }
 
-rw(1);rzw(1);rrf(1);rtf();rzn();rad();
+/* ═══════════════════════════════════════════════════════════
+   KPI UPDATE
+═══════════════════════════════════════════════════════════ */
+function updateKPIs() {
+  const ph = Math.floor(CFG.weeks / 3);
+  const activeSports = getActiveSports();
+  const top2 = activeSports.filter(s => isCardioSport(s.id)).slice(0,2).map(s => s.label.split(' ')[0]);
+  const sportsLabel = top2.length >= 2 ? top2.join(' + ') : (top2[0] || 'Sport');
+
+  document.getElementById('kv-duree').textContent  = CFG.weeks + ' semaines';
+  document.getElementById('kv-phases').textContent = '3 × ' + ph + ' sem.';
+  document.getElementById('kv-jours').textContent  = CFG.activeDays + ' / semaine';
+  document.getElementById('kv-sports').textContent = sportsLabel;
+
+  // Update header
+  const sportNames = activeSports.map(s => s.label.split(' ')[0]).slice(0,3).join(' + ');
+  document.getElementById('hdr-title').textContent = 'Programme ' + sportNames + ' — ' + CFG.weeks + ' semaines';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TAB VISIBILITY
+═══════════════════════════════════════════════════════════ */
+function updateTabVisibility() {
+  const active = getActiveSports().map(s => s.id);
+  const hasZwift = active.includes('velo_indoor');
+  const hasRenfo = active.includes('renfo');
+
+  const tabZwift = document.getElementById('tab-zwift');
+  const tabRenfo = document.getElementById('tab-renfo');
+
+  tabZwift.style.display = hasZwift ? '' : 'none';
+  tabRenfo.style.display = hasRenfo ? '' : 'none';
+
+  // If currently active tab is hidden, switch to semaine
+  const activeTab = document.querySelector('.nt.on');
+  if (activeTab && activeTab.style.display === 'none') {
+    document.querySelectorAll('.pnl').forEach(p => p.classList.remove('on'));
+    document.querySelectorAll('.nt').forEach(b => b.classList.remove('on'));
+    document.getElementById('p-semaine').classList.add('on');
+    document.getElementById('tab-semaine').classList.add('on');
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PHASE PILL LABELS UPDATE
+═══════════════════════════════════════════════════════════ */
+function updatePhasePills() {
+  const PH = computePhases();
+  const weekPills = document.querySelectorAll('#ph-semaine .pb');
+  if (weekPills.length >= 3) {
+    weekPills[0].textContent = PH[0].t;
+    weekPills[1].textContent = PH[1].t;
+    weekPills[2].textContent = PH[2].t;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   REGENERATE — main entry point
+═══════════════════════════════════════════════════════════ */
+function regenerate() {
+  updateKPIs();
+  updateTabVisibility();
+  updatePhasePills();
+
+  // Re-render currently active panels
+  rw(1); // reset to phase 1 of semaine
+  rzw(1);
+  rrf(1);
+  rtf();
+  rzn();
+  rad();
+
+  // Reset phase pill active states
+  document.querySelectorAll('#ph-semaine .pb').forEach((b,i) => {
+    b.classList.remove('on','b2','b3');
+    if(i===0) { b.classList.add('on'); }
+  });
+  document.querySelectorAll('#p-zwift .phr .pb').forEach((b,i) => {
+    b.classList.remove('on','b2','b3');
+    if(i===0) { b.classList.add('on'); }
+  });
+  document.querySelectorAll('#p-renfo .phr .pb').forEach((b,i) => {
+    b.classList.remove('on','b2','b3');
+    if(i===0) { b.classList.add('on'); }
+  });
+
+  // Show semaine tab
+  document.querySelectorAll('.pnl').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.nt').forEach(b => b.classList.remove('on'));
+  document.getElementById('p-semaine').classList.add('on');
+  document.getElementById('tab-semaine').classList.add('on');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CONFIG UI RENDERERS
+═══════════════════════════════════════════════════════════ */
+function renderWeeksChips() {
+  const opts = [4, 8, 12, 16, 20, 24];
+  const el = document.getElementById('chips-weeks');
+  el.innerHTML = opts.map(n =>
+    `<button class="chip${CFG.weeks===n?' on':''}" onclick="setWeeks(${n},this)">${n} semaines</button>`
+  ).join('');
+}
+
+function renderDaysChips() {
+  const opts = [3, 4, 5, 6, 7];
+  const el = document.getElementById('chips-days');
+  el.innerHTML = opts.map(n =>
+    `<button class="chip${CFG.activeDays===n?' on':''}" onclick="setDays(${n},this)">${n} j.</button>`
+  ).join('');
+}
+
+function renderSportsList() {
+  const el = document.getElementById('sports-list');
+  const checked = CFG.allSports.filter(s => s.checked);
+  const unchecked = CFG.allSports.filter(s => !s.checked);
+  const sorted = [...checked, ...unchecked];
+
+  el.innerHTML = sorted.map((sport, visIdx) => {
+    const checkedIdx = checked.indexOf(sport);
+    const isChecked = sport.checked;
+    const priorityNum = isChecked ? checkedIdx + 1 : '';
+    const dotColor = SPORT_BADGE_COLORS[sport.id] || '#999';
+    const canMoveUp = isChecked && checkedIdx > 0;
+    const canMoveDown = isChecked && checkedIdx < checked.length - 1;
+
+    return `<div class="sport-item${isChecked?'':' unchecked'}" data-id="${sport.id}">
+      <div class="sport-dot" style="background:${dotColor}"></div>
+      <span class="sport-priority-badge">${priorityNum ? '#'+priorityNum : ''}</span>
+      <input type="checkbox" class="sport-check-input" ${isChecked?'checked':''} onchange="toggleSport('${sport.id}',this)" title="${sport.label}">
+      <span class="sport-label" onclick="toggleSport('${sport.id}')">${sport.label}</span>
+      <div class="sport-order">
+        <button onclick="moveSport('${sport.id}',-1)" ${!canMoveUp?'disabled':''} title="Monter">↑</button>
+        <button onclick="moveSport('${sport.id}',1)" ${!canMoveDown?'disabled':''} title="Descendre">↓</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CONFIG ACTIONS
+═══════════════════════════════════════════════════════════ */
+function setWeeks(n, btn) {
+  CFG.weeks = n;
+  renderWeeksChips();
+  regenerate();
+}
+
+function setDays(n, btn) {
+  CFG.activeDays = n;
+  renderDaysChips();
+  regenerate();
+}
+
+function toggleSport(id, checkboxEl) {
+  const sport = CFG.allSports.find(s => s.id === id);
+  if (!sport) return;
+  // If called from label click, toggle the value
+  if (!checkboxEl) {
+    sport.checked = !sport.checked;
+  } else {
+    sport.checked = checkboxEl.checked;
+  }
+  // If unchecked, move to end of list
+  if (!sport.checked) {
+    const idx = CFG.allSports.indexOf(sport);
+    CFG.allSports.splice(idx, 1);
+    CFG.allSports.push(sport);
+  }
+  renderSportsList();
+  regenerate();
+}
+
+function moveSport(id, dir) {
+  const checked = CFG.allSports.filter(s => s.checked);
+  const idx = checked.findIndex(s => s.id === id);
+  if (idx < 0) return;
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= checked.length) return;
+
+  // Swap in the full allSports array
+  const idxA = CFG.allSports.indexOf(checked[idx]);
+  const idxB = CFG.allSports.indexOf(checked[newIdx]);
+  [CFG.allSports[idxA], CFG.allSports[idxB]] = [CFG.allSports[idxB], CFG.allSports[idxA]];
+
+  renderSportsList();
+  regenerate();
+}
+
+function toggleConfig() {
+  const body = document.getElementById('cfg-body');
+  const btn  = document.getElementById('cfg-toggle-btn');
+  body.classList.toggle('collapsed');
+  btn.textContent = body.classList.contains('collapsed') ? '▼ Modifier' : '▲ Réduire';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TAB / PHASE NAVIGATION
+═══════════════════════════════════════════════════════════ */
+function st(id, btn) {
+  document.querySelectorAll('.pnl').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.nt').forEach(b => b.classList.remove('on'));
+  document.getElementById('p-'+id).classList.add('on');
+  btn.classList.add('on');
+}
+
+function sa(g, btn, ph) {
+  g.querySelectorAll('.pb').forEach(b => b.classList.remove('on','b2','b3'));
+  btn.classList.add('on');
+  if (ph===2) btn.classList.add('b2');
+  if (ph===3) btn.classList.add('b3');
+}
+
+function sw(ph, btn) { sa(btn.parentElement, btn, ph); rw(ph); }
+function sz(ph, btn) { sa(btn.parentElement, btn, ph); rzw(ph); }
+function sr(ph, btn) { sa(btn.parentElement, btn, ph); rrf(ph); }
+
+/* ═══════════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════════ */
+renderWeeksChips();
+renderDaysChips();
+renderSportsList();
+regenerate();
 </script>
 
 </body>
