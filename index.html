@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Programme trail &amp; vélo — 12 semaines</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ─── Design tokens (brand) ─────────────────────────────── */
+    :root {
+      --ink:        #12263A;
+      --sand:       #F4EFE6;
+      --paper:      #FBFAF7;
+      --text:       #24272A;
+      --muted:      #687076;
+      --sage:       #7D9A83;
+      --sage-light: #E0EAE2;
+      --sage-mid:   #5A7A60;
+      --terra:      #D9824B;
+      --terra-light:#FAE9D9;
+      --terra-mid:  #B5622E;
+      --mist:       #DCE8EA;
+      --mist-mid:   #3D6A72;
+      --border:     #DDD5C8;
+      --warning:    #E8B86D;
+      --risk:       #B85C4A;
+      --risk-light: #F5E8E4;
+      --shadow-soft: 0 8px 24px rgba(18,38,58,0.08);
+      --shadow-hover:0 12px 32px rgba(18,38,58,0.12);
+
+      /* widget variable bridge */
+      --color-background-primary:   var(--paper);
+      --color-background-secondary: rgba(212,203,191,0.22);
+      --color-text-primary:   var(--text);
+      --color-text-secondary: var(--muted);
+      --color-border-secondary: var(--border);
+      --color-border-tertiary:  rgba(221,213,200,0.55);
+      --border-radius-lg: 20px;
+      --border-radius-md: 12px;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background-color: var(--sand);
+      background-image: radial-gradient(rgba(18,38,58,0.032) 1px, transparent 1px);
+      background-size: 18px 18px;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      padding: clamp(1.25rem, 4vw, 2.5rem) clamp(0.875rem, 3vw, 1.5rem) 5rem;
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      animation: rise 0.38s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    @keyframes rise {
+      from { opacity:0; transform:translateY(12px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    .app { font-family: 'Inter', sans-serif; }
+
+    /* ─── Header ─────────────────────────────────────────────── */
+    .hdr {
+      background: var(--ink);
+      border-radius: 24px;
+      padding: 22px 26px 20px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+    }
+    .hdr::after {
+      content: '';
+      position: absolute;
+      top: -40%; right: -10%;
+      width: 340px; height: 340px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(125,154,131,.18) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hdr-t {
+      font-family: 'Sora', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--paper);
+      letter-spacing: -0.01em;
+      position: relative;
+    }
+    .hdr-s {
+      font-size: 11.5px;
+      font-weight: 400;
+      color: rgba(251,250,247,0.58);
+      margin-top: 5px;
+      letter-spacing: 0.01em;
+      position: relative;
+    }
+
+    /* ─── Stats row ───────────────────────────────────────────── */
+    .krow {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 480px) { .krow { grid-template-columns: repeat(2,1fr); } }
+    .kc {
+      background: var(--paper);
+      border-radius: 16px;
+      padding: 12px 15px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+    }
+    .kl {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 5px;
+    }
+    .kv {
+      font-family: 'Sora', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+
+    /* ─── Tab nav ─────────────────────────────────────────────── */
+    .nav {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+      background: rgba(212,203,191,0.35);
+      border-radius: 16px;
+      padding: 4px;
+    }
+    .nt {
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      border: none;
+      border-radius: 12px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+    }
+    .nt:hover { background: rgba(251,250,247,0.7); color: var(--ink); }
+    .nt.on {
+      background: var(--paper);
+      color: var(--ink);
+      font-weight: 600;
+      box-shadow: 0 1px 6px rgba(18,38,58,0.09);
+    }
+
+    /* ─── Panels ──────────────────────────────────────────────── */
+    .pnl { display: none; }
+    .pnl.on { display: block; animation: rise 0.22s cubic-bezier(0.16,1,0.3,1) both; }
+
+    /* ─── Phase pills ──────────────────────────────────────────── */
+    .phr { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+    .pb {
+      padding: 6px 14px;
+      font-size: 11.5px;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.16s;
+      box-shadow: 0 1px 3px rgba(18,38,58,0.04);
+    }
+    .pb:hover { background: var(--sand); color: var(--ink); }
+    .pb.on    { background: var(--sage-light); color: var(--sage-mid); border-color: var(--sage); font-weight: 600; }
+    .pb.on.b2 { background: var(--mist);       color: var(--mist-mid); border-color: #90BCC5; }
+    .pb.on.b3 { background: var(--terra-light); color: var(--terra-mid); border-color: var(--terra); }
+
+    /* ─── Phase banner ─────────────────────────────────────────── */
+    .pban {
+      border-radius: 16px;
+      padding: 13px 18px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-soft);
+    }
+    .pban-t {
+      font-family: 'Sora', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--paper);
+      letter-spacing: -0.01em;
+    }
+    .pban-s { font-size: 11px; color: rgba(251,250,247,0.65); margin-top: 3px; }
+
+    /* ─── Tables ───────────────────────────────────────────────── */
+    .tw {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      overflow-x: auto;
+      box-shadow: var(--shadow-soft);
+      background: var(--paper);
+    }
+    .tw table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      table-layout: fixed;
+    }
+    .tw thead tr th {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      color: rgba(251,250,247,0.90);
+      padding: 9px 12px;
+      text-align: left;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .tw td {
+      padding: 9px 12px;
+      color: var(--text);
+      border-bottom: 1px solid rgba(221,213,200,0.55);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .tw tr:last-child td { border-bottom: none; }
+    .tw tr:nth-child(even) td { background: rgba(212,203,191,0.12); }
+
+    /* ─── Badges ───────────────────────────────────────────────── */
+    .bd {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin: 1px 2px 1px 0;
+      white-space: nowrap;
+      letter-spacing: 0.025em;
+    }
+    .bv { background: var(--mist);       color: #1D5060; }
+    .bc { background: var(--sage-light); color: var(--sage-mid); }
+    .br { background: #EAE8F2;           color: #3D3B62; }
+    .bz { background: var(--terra-light);color: var(--terra-mid); }
+    .bl { background: var(--risk-light); color: #7A2E22; }
+
+    /* ─── Section heading ──────────────────────────────────────── */
+    .sh {
+      font-family: 'Sora', sans-serif;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin: 1.375rem 0 0.625rem;
+    }
+
+    /* ─── Note ─────────────────────────────────────────────────── */
+    .note {
+      font-size: 12px;
+      color: var(--mist-mid);
+      margin-top: 8px;
+      padding: 10px 14px;
+      background: var(--mist);
+      border-radius: 12px;
+      border: 1px solid rgba(144,188,197,0.4);
+      line-height: 1.55;
+    }
+
+    /* ─── Timeline ──────────────────────────────────────────────── */
+    .tl  { display: grid; gap: 14px; }
+    .tlr { display: grid; grid-template-columns: 64px 1fr; }
+    .tll { display: flex; flex-direction: column; align-items: center; gap: 3px; padding-top: 2px; }
+    .tlw {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px; font-weight: 600; color: var(--muted);
+      text-align: center; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .tld { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--sand); flex-shrink: 0; }
+    .tlln { width: 2px; flex: 1; min-height: 14px; opacity: 0.25; }
+    .tlc  { padding-left: 12px; }
+    .tlh  {
+      font-family: 'Sora', sans-serif;
+      font-size: 12px; font-weight: 600;
+      border-radius: 10px; padding: 4px 12px;
+      margin-bottom: 8px; display: inline-block; letter-spacing: -0.005em;
+    }
+    .tlp    { font-size: 12px; color: var(--muted); display: flex; gap: 7px; padding: 2px 0; line-height: 1.5; }
+    .tlp.hi { color: var(--text); font-weight: 600; }
+
+    /* ─── Adaptations ───────────────────────────────────────────── */
+    .ai {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 13px 15px;
+      margin-bottom: 9px;
+      box-shadow: 0 2px 8px rgba(18,38,58,0.04);
+    }
+    .at {
+      font-family: 'Inter', sans-serif;
+      font-size: 10.5px; font-weight: 600; color: var(--terra-mid);
+      margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .aa { font-size: 12px; color: var(--text); line-height: 1.55; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Programme trail et vélo 12 semaines avec Zwift H3 et jalons transformation</h2>
+
+<div class="app">
+<div class="hdr">
+  <div class="hdr-t">Programme trail &amp; vélo — 12 semaines</div>
+  <div class="hdr-s">Relance · Régularité · Performance — Saris H3 + Zwift — Jalons transformation 5 semaines</div>
+</div>
+
+<div class="krow">
+  <div class="kc"><div class="kl">Durée</div><div class="kv">12 semaines</div></div>
+  <div class="kc"><div class="kl">Phases</div><div class="kv">3 × 4 sem.</div></div>
+  <div class="kc"><div class="kl">Jours actifs</div><div class="kv">6 / semaine</div></div>
+  <div class="kc"><div class="kl">Home trainer</div><div class="kv">Saris H3 + Zwift</div></div>
+</div>
+
+<div class="nav">
+  <button class="nt on" onclick="st('semaine',this)">Semaine type</button>
+  <button class="nt" onclick="st('zwift',this)">Zwift H3</button>
+  <button class="nt" onclick="st('renfo',this)">Renfo A &amp; B</button>
+  <button class="nt" onclick="st('transfo',this)">Jalons 5 sem.</button>
+  <button class="nt" onclick="st('zones',this)">Zones</button>
+  <button class="nt" onclick="st('adapt',this)">Adaptations</button>
+</div>
+
+<div id="p-semaine" class="pnl on">
+  <div class="phr">
+    <button class="pb on" onclick="sw(1,this)">Phase 1 — Relance</button>
+    <button class="pb" onclick="sw(2,this)">Phase 2 — Régularité</button>
+    <button class="pb" onclick="sw(3,this)">Phase 3 — Performance</button>
+  </div>
+  <div id="wc"></div>
+</div>
+<div id="p-zwift" class="pnl">
+  <div class="phr">
+    <button class="pb on" onclick="sz(1,this)">Phase 1</button>
+    <button class="pb" onclick="sz(2,this)">Phase 2</button>
+    <button class="pb" onclick="sz(3,this)">Phase 3</button>
+  </div>
+  <div id="zc"></div>
+</div>
+<div id="p-renfo" class="pnl">
+  <div class="phr">
+    <button class="pb on" onclick="sr(1,this)">Phase 1</button>
+    <button class="pb" onclick="sr(2,this)">Phase 2</button>
+    <button class="pb" onclick="sr(3,this)">Phase 3</button>
+  </div>
+  <div id="rc"></div>
+</div>
+<div id="p-transfo" class="pnl"><div id="tc" class="tl"></div></div>
+<div id="p-zones"   class="pnl"><div id="zn"></div></div>
+<div id="p-adapt"   class="pnl"><div id="ac"></div></div>
+</div>
+
+</div>
+
+<script>
+const WK={1:[
+{d:'Lundi',s:'Midi / 20h',b:[['bc','CAP trail']],m:'35 min Z1-Z2 — sentiers plats, run/marche ok',x:'Moulin Blanc ou bord de mer. Plaisir avant perf.'},
+{d:'Mardi',s:'20h30',b:[['br','Renfo A'],['bz','Zwift opt.']],m:'Séance A — bas du corps + gainage (40 min)',x:'Zwift Just Spin 20 min Z1 si énergie après renfo.'},
+{d:'Mercredi',s:'Journée',b:[['bv','Vélotaf 34 km']],m:'Endurance Z1-Z2 — séance entière comptabilisée',x:'Pas de Zwift le soir : récupération obligatoire.'},
+{d:'Jeudi',s:'20h30',b:[['br','Renfo B'],['bz','Zwift Z1']],m:'Séance B — haut du corps (35 min) + Zwift 20 min',x:'Endurance ride, no intensity. Ou Zwift seul si renfo sauté.'},
+{d:'Vendredi',s:'20h30',b:[['bz','Zwift structuré']],m:'Active Recovery 35 min — 56-64% FTP',x:'Workouts > Recovery. Pas de renfo ce soir.'},
+{d:'Samedi',s:'Sport enfants',b:[['bc','CAP trail']],m:'45 min trail — sentiers autour de Brest',x:'Créneau parallèle sport des enfants.'},
+{d:'Dimanche',s:'Matin',b:[['bl','Sortie longue']],m:'60-75 min trail Z2 ou 1h30 vélo route',x:'1 dim/2 : alterner trail / vélo selon envie.'},
+],2:[
+{d:'Lundi',s:'Midi / 20h',b:[['bc','CAP trail']],m:'40 min — fractionné 6×1 min Z4 / 2 min Z1',x:'Amorce intensité. Sentiers avec D+.'},
+{d:'Mardi',s:'20h30',b:[['br','Renfo A+'],['bz','Zwift opt.']],m:'Séance A+ — 4 séries, charges +2-4 kg (45 min)',x:'Zwift 20 min Z1 si < 21h et énergie suffisante.'},
+{d:'Mercredi',s:'Journée',b:[['bv','Vélotaf 34 km']],m:'Avec 2×10 min blocs Z3 intégrés au retour',x:'Vélotaf semi-structuré.'},
+{d:'Jeudi',s:'20h30',b:[['br','Renfo B+'],['bz','Zwift Z2']],m:'Séance B+ (40 min) + Zwift 25 min Z1-Z2',x:'Double soir le plus chargé — surveiller la fatigue.'},
+{d:'Vendredi',s:'20h30',b:[['bz','Sweet Spot']],m:'Sweet Spot Court 40 min — 88-93% FTP',x:'Re-test FTP en début S5. Séance clé aérobie.'},
+{d:'Samedi',s:'Sport enfants',b:[['bc','CAP trail']],m:'50 min trail D+ — Landerneau / Cranou',x:'D+ > 100 m par sortie.'},
+{d:'Dimanche',s:'Matin',b:[['bl','Sortie longue']],m:'90 min trail Z2 ou 2h vélo route',x:'1 dim/2 : trail long / vélo côtes. Gran fondo prep.'},
+],3:[
+{d:'Lundi',s:'Midi / 20h',b:[['bc','CAP intensif']],m:'45 min — 3×8 min Z4 seuil ou tempo D+',x:'Séance qualitative CAP clé de la semaine.'},
+{d:'Mardi',s:'20h30',b:[['br','Renfo A perf']],m:'Plyométrie + charges max (45 min)',x:'Zwift si énergie suffisante après.'},
+{d:'Mercredi',s:'Journée',b:[['bv','Vélotaf structuré']],m:'34 km avec 3×5 min Z4-Z5 intégrés au retour',x:'Vélotaf = séance de qualité.'},
+{d:'Jeudi',s:'20h30',b:[['br','Renfo B perf'],['bz','Zwift Z1']],m:'Séance B lourde (45 min) + Zwift 20 min Z1',x:'10 min mobilité avant Zwift.'},
+{d:'Vendredi',s:'20h30',b:[['bz','VO2max']],m:'VO2max 40-45 min — 5×3 min à 110-120% FTP',x:'The Wringer ou Emerge. Dormir 7h+ avant dim.'},
+{d:'Samedi',s:'Sport enfants',b:[['bc','CAP technique'],['bl','BRM prep']],m:'1h trail D+ ou vélo 1h30 avec côtes',x:'Option S11-S12 : simulation BRM / gran fondo.'},
+{d:'Dimanche',s:'Matin',b:[['bl','Sortie race-pace']],m:'2h trail Z2-Z3 ou 3h vélo — 30 min allure cible',x:'Simulation conditions compétition / BRM.'},
+]};
+
+const ZW={1:[
+{n:'Ramp Test FTP',w:'S1 — vendredi',d:'30 min',i:'Obligatoire. Workouts > FTP Tests > Ramp Test. Ce chiffre calibre toutes les zones pour 12 semaines. Note-le.'},
+{n:'Just Spin / Recovery',w:'Mardi après renfo (opt.)',d:'20 min',i:'Z1 pur < 130 W ou < 60% FTP. Pas de structure. Active la circulation sans fatigue.'},
+{n:'Endurance Ride Z2',w:'Jeudi après renfo B',d:'25-30 min',i:'Workouts > Endurance > Long Slow Distance. 65-75% FTP strict. Ne pas dépasser Z2. Levier principal perte de poids.'},
+{n:'Active Recovery',w:'Vendredi soir',d:'35 min',i:'Workouts > Recovery > Active Recovery. 56-64% FTP. Phase 1 reste légère. Prépare le week-end sans fatigue.'},
+],2:[
+{n:'Ramp Test — re-test',w:'Vendredi S5',d:'30 min',i:'Gain attendu +5 à 12 W vs S1. Premier marqueur vélo concret. Pas de gain = augmenter Z2, pas l\'intensité.'},
+{n:'Sweet Spot Court',w:'Vendredi (sem. paires)',d:'40 min',i:'Workouts > Gorby ou Sweet Spot Short. 2×10 min à 88-93% FTP. Séance clé développement aérobie gran fondo.'},
+{n:'Threshold Short',w:'Jeudi après renfo B',d:'25 min',i:'3×5 min à 95-100% FTP, récup 3 min. Puissant pour les adaptations cardiovasculaires.'},
+{n:'Zwift Race — Cat. D/E',w:'Vendredi (sem. impaires)',d:'35-45 min',i:'Events > Racing. La dynamique de groupe tire vers Z4-Z5 naturellement. Très efficace.'},
+],3:[
+{n:'Ramp Test — final',w:'Vendredi S9',d:'30 min',i:'3e test. Progression attendue +15 à 25 W vs S1. Niveau objectif avant gran fondo ou BRM.'},
+{n:'VO2max Intervals',w:'Vendredi (sem. paires)',d:'40 min',i:'Workouts > The Wringer ou Emerge. 5×3 min à 110-120% FTP, récup 3 min. Bonne nutrition la veille.'},
+{n:'Gran Fondo Simulation',w:'1 dim/2 — rem. sortie longue',d:'90-120 min',i:'Route libre. 60 min à Tempo 76-87% FTP. Teste la nutrition à l\'effort. Idéal 2-3 sem. avant épreuve.'},
+{n:'Zwift Race — Cat. C/D',w:'Vendredi (sem. impaires)',d:'40 min',i:'FTP améliorée = cat. C/D solide. Intensité impossible à simuler seul. Marqueur de progression.'},
+]};
+
+const RF={1:{A:[
+{e:'Goblet squat',s:'3×12',c:'KB 12 kg',n:'Descente 3s, pause basse 1s'},
+{e:'Fente avant alternée',s:'3×10/côté',c:'Haltères 6 kg',n:'Genou 2 cm du sol'},
+{e:'Pont fessier',s:'3×15',c:'Corps',n:'1s en haut, serrer les fessiers'},
+{e:'Deadlift roumain KB',s:'3×12',c:'KB 16 kg',n:'Charnière hanches, dos droit'},
+{e:'Gainage planche',s:'3×30s',c:'—',n:'Antéversion nulle, respiration'},
+{e:'Gainage latéral',s:'3×25s/côté',c:'—',n:'Bassin neutre'},
+],B:[
+{e:'Rowing haltères',s:'3×12',c:'Haltères 8 kg',n:'Coude serré, omoplate en fin'},
+{e:'Développé haltères',s:'3×12',c:'Haltères 8 kg',n:'Coudes à 45°'},
+{e:'Tirage élastique face',s:'3×15',c:'Élastique moyen',n:'Rétraction scapulaire'},
+{e:'Curl biceps',s:'3×12',c:'Haltères 7 kg',n:'Supination complète'},
+{e:'Gainage latéral dyn.',s:'3×20s/côté',c:'—',n:'Montée/descente lente'},
+{e:'Superman',s:'3×12',c:'—',n:'Tenue 2s en haut'},
+]},2:{A:[
+{e:'Goblet squat',s:'4×10',c:'KB 16 kg',n:'Pause basse 2s'},
+{e:'Squat bulgare',s:'3×10/côté',c:'Haltères 8 kg',n:'Remplace la fente'},
+{e:'Pont fessier unilatéral',s:'3×12/côté',c:'Corps',n:'Single-leg progression'},
+{e:'Deadlift roumain KB',s:'4×10',c:'KB 20 kg',n:'Charge +4 kg vs P1'},
+{e:'Planche dynamique',s:'3×40s',c:'—',n:'Leg raise ou shoulder tap'},
+{e:'Gainage latéral + rotation',s:'3×30s/côté',c:'—',n:'Rotation épaule vers bas'},
+],B:[
+{e:'Rowing haltères',s:'4×10',c:'Haltères 12 kg',n:'Plus lourd, gainage dorsal'},
+{e:'Développé haltères',s:'4×10',c:'Haltères 12 kg',n:'4e série proche de l\'échec'},
+{e:'Tirage élastique',s:'4×12',c:'Élastique fort',n:'Plus résistant'},
+{e:'Face pull élastique',s:'3×15',c:'Élastique moyen',n:'Rotateurs externes'},
+{e:'Pallof press',s:'3×12/côté',c:'Élastique',n:'Anti-rotation — clé vélo'},
+{e:'Bird-dog',s:'3×10/côté',c:'—',n:'Stabilité lombaire'},
+]},3:{A:[
+{e:'Squat KB double',s:'4×8',c:'2× KB 16 kg',n:'Montée explosive'},
+{e:'Squat bulgare lesté',s:'4×8/côté',c:'Haltères 12 kg',n:'Charge max Phase 3'},
+{e:'Pont fessier unilat. lesté',s:'3×10/côté',c:'Haltère 10 kg',n:'Stabilité pelvienne'},
+{e:'Deadlift KB unilatéral',s:'3×10/côté',c:'KB 20 kg',n:'Balance + force unijambe'},
+{e:'Box jump (sur marche)',s:'3×8',c:'—',n:'Atterrissage amorti'},
+{e:'Planche lestée',s:'3×45s',c:'Haltère 5 kg sur dos',n:'Progression finale'},
+],B:[
+{e:'Rowing unilat. lourd',s:'4×8/côté',c:'Haltère 18 kg',n:'Épuisement 4e série'},
+{e:'Push-up lesté',s:'4×8',c:'Haltère 5 kg en sac',n:'Ou pieds surélevés'},
+{e:'Tirage élastique + rotation',s:'3×12/côté',c:'Élastique fort',n:'Plan transversal'},
+{e:'Développé militaire',s:'3×10',c:'Haltères 10 kg',n:'Debout — stabilité max'},
+{e:'Pallof press + overhead',s:'3×10/côté',c:'Élastique fort',n:'Enchaînement complexe'},
+{e:'Turkish get-up',s:'2×3/côté',c:'KB 12 kg',n:'Finisher total'},
+]}};
+
+const TR=[
+{w:'S1-S2',t:'Activation neuromusculaire',col:'#5A7A60',bg:'#E0EAE2',tc:'#3B5E40',pts:[
+{txt:'Courbatures normales J1-5 — signe de recrutement actif',hi:false},
+{txt:'FC repos commence à descendre — mesurer chaque matin',hi:false},
+{txt:'Tonicité dans les quadriceps perceptible fin S2',hi:true},
+{txt:'Appuis trail et cheville plus stables',hi:false},
+{txt:'FTP Zwift ramp test S1 — noter le chiffre de base',hi:true},
+]},
+{w:'S3',t:'Première visibilité physique',col:'#1D5060',bg:'#DCE8EA',tc:'#1D4060',pts:[
+{txt:'Tonicité jambes visible au miroir — quads et mollets',hi:true},
+{txt:'Épaules plus larges grâce au renfo B',hi:true},
+{txt:'Perte 1 à 1,5 kg si alimentation structurée',hi:false},
+{txt:'Ventre moins gonflé — rétention d\'eau disparaît',hi:true},
+{txt:'CAP 35 min sans marche tenue en fin de S3',hi:false},
+]},
+{w:'S4',t:'Premier bilan chiffré',col:'#12263A',bg:'#E4E9EF',tc:'#12263A',pts:[
+{txt:'Photo comparaison S1 vs S4 — même cadrage et lumière',hi:true},
+{txt:'Tour de taille : perte attendue 1-2 cm',hi:true},
+{txt:'Poids : -1,5 à 2,5 kg vs S1 (variable)',hi:false},
+{txt:'Zwift : même effort ressenti = puissance supérieure',hi:false},
+{txt:'Renfo : goblet squat à 16 kg minimum propre',hi:true},
+]},
+{w:'S5',t:'Point de bascule — régularité installée',col:'#B5622E',bg:'#FAE9D9',tc:'#8A4318',pts:[
+{txt:'Entourage commence à remarquer — motivation clé',hi:true},
+{txt:'FTP re-test Zwift : +5 à 12 W attendus vs S1',hi:true},
+{txt:'Vêtements : une taille de pantalon plus libre',hi:true},
+{txt:'Énergie journalière nettement améliorée',hi:false},
+{txt:'30 jours tenus — régularité neurologiquement installée',hi:true},
+]},
+];
+
+const AD=[
+{t:'Vélotaf impossible (météo)',a:'Zwift structuré 45-60 min sur le H3 — Sweet Spot ou Endurance selon la phase. Le H3 garantit que cette compensation ne peut jamais être annulée pour cause météo.'},
+{t:'Midi sauté (réunion, imprévu)',a:'CAP décalée à 20h en remplacement du renfo, OU renfo raccourci 25 min (garder les charges, supprimer le gainage). CAP prioritaire si une seule option.'},
+{t:'Double blocage soir',a:'Zwift 20 min Z1 uniquement sur le H3. Maintenir le rythme circadien d\'activité est plus important que la qualité de la séance.'},
+{t:'Fatigue élevée — FC repos +5 bpm',a:'Zwift Z1 uniquement 20 min, < 60% FTP. Zéro renfo. S\'entraîner sur fatigue profonde induit des blessures, pas des adaptations.'},
+{t:'Douleur genou / cheville en CAP',a:'Stopper CAP. Zwift Z1 (le vélo ne sollicite pas les mêmes tendons). Renfo : supprimer squats, garder ponts fessiers. Réévaluer après 48h.'},
+{t:'Semaine chargée — minimum vital',a:'Conserver : 1 renfo + vélotaf + 1 Zwift soir = 3 créneaux actifs. Le H3 garantit que le Zwift ne peut jamais être annulé pour cause météo.'},
+];
+
+const ZONES=[
+{z:'Z1',n:'Récupération active',col:'#7D9A83',v:'< 56% FTP',c:'< 60% FC max',r:'Très facile, conversation aisée'},
+{z:'Z2',n:'Endurance de base',col:'#4A7C9E',v:'56-75% FTP',c:'60-70% FC max',r:'Facile, phrases complètes'},
+{z:'Z3',n:'Tempo',col:'#C49A2E',v:'76-87% FTP',c:'70-80% FC max',r:'Modéré, phrases courtes'},
+{z:'Z4',n:'Seuil / Sweet Spot',col:'#D9824B',v:'88-105% FTP',c:'80-90% FC max',r:'Difficile, quelques mots'},
+{z:'Z5',n:'VO2max',col:'#B85C4A',v:'106-120% FTP',c:'90-100% FC max',r:'Très difficile, impossible parler'},
+];
+
+const PH=[
+{t:'Phase 1 — Relance',s:'Sem. 1-4 · Réactivation neuromusculaire · Z1-Z2 · Zwift léger · Charges légères',col:'#12263A'},
+{t:'Phase 2 — Régularité',s:'Sem. 5-8 · Charge progressive · Blocs Z3-Z4 · Sweet Spot Zwift · Race vélo',col:'#1D4A5A'},
+{t:'Phase 3 — Performance',s:'Sem. 9-12 · Plyométrie · Puissance max · VO2max · Simulation compétition',col:'#B5622E'},
+];
+
+const TC=['#12263A','#1D4A5A','#B5622E'];
+
+function st(id,btn){
+  document.querySelectorAll('.pnl').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nt').forEach(b=>b.classList.remove('on'));
+  document.getElementById('p-'+id).classList.add('on');
+  btn.classList.add('on');
+}
+function sa(g,btn,ph){
+  g.querySelectorAll('.pb').forEach(b=>b.classList.remove('on','b2','b3'));
+  btn.classList.add('on');
+  if(ph===2)btn.classList.add('b2');
+  if(ph===3)btn.classList.add('b3');
+}
+function bg(bs){return bs.map(([k,v])=>`<span class="bd ${k}">${v}</span>`).join('');}
+
+function rw(ph){
+  const p=PH[ph-1],tc=TC[ph-1];
+  let h=`<div class="pban" style="background:${p.col}"><div class="pban-t">${p.t}</div><div class="pban-s">${p.s}</div></div>`;
+  h+=`<div class="tw"><table><thead><tr style="background:${tc}"><th style="width:58px">Jour</th><th style="width:74px">Créneau</th><th style="width:80px">Type</th><th>Activité</th><th style="width:150px">Détail</th></tr></thead><tbody>`;
+  WK[ph].forEach(d=>{h+=`<tr><td style="font-weight:600">${d.d}</td><td style="font-size:11px;color:var(--muted)">${d.s}</td><td>${bg(d.b)}</td><td>${d.m}</td><td style="font-size:11px;color:var(--muted)">${d.x}</td></tr>`;});
+  h+=`</tbody></table></div>`;
+  document.getElementById('wc').innerHTML=h;
+}
+function sw(ph,btn){sa(btn.parentElement,btn,ph);rw(ph);}
+
+function rzw(ph){
+  const tc=TC[ph-1];
+  let h=`<div class="sh">Séances Zwift H3 — phase ${ph}</div><div class="tw"><table><thead><tr style="background:${tc}"><th style="width:140px">Workout</th><th style="width:130px">Créneau</th><th style="width:60px">Durée</th><th>Description</th></tr></thead><tbody>`;
+  ZW[ph].forEach(z=>{h+=`<tr><td style="font-weight:600">${z.n}</td><td style="font-size:11px">${z.w}</td><td><span class="bd bz">${z.d}</span></td><td style="font-size:11px">${z.i}</td></tr>`;});
+  h+=`</tbody></table></div>`;
+  document.getElementById('zc').innerHTML=h;
+}
+function sz(ph,btn){sa(btn.parentElement,btn,ph);rzw(ph);}
+
+function rrf(ph){
+  const tc=TC[ph-1];
+  let h='';
+  ['A','B'].forEach(s=>{
+    const tit=s==='A'?'Séance A — Bas du corps + gainage':'Séance B — Haut du corps + gainage latéral';
+    h+=`<div class="sh">${tit}</div><div class="tw"><table><thead><tr style="background:${tc}"><th style="width:150px">Exercice</th><th style="width:90px">Séries</th><th style="width:100px">Charge</th><th>Consigne</th></tr></thead><tbody>`;
+    RF[ph][s].forEach(e=>{h+=`<tr><td style="font-weight:600">${e.e}</td><td>${e.s}</td><td style="font-size:11px">${e.c}</td><td style="font-size:11px">${e.n}</td></tr>`;});
+    h+=`</tbody></table></div>`;
+  });
+  h+=`<div class="note">Règle de progression : si tu termines la dernière série avec 3-4 reps de réserve, augmenter de 2 kg. Si la technique flanche à la rep 8, descendre de 2 kg.</div>`;
+  document.getElementById('rc').innerHTML=h;
+}
+function sr(ph,btn){sa(btn.parentElement,btn,ph);rrf(ph);}
+
+function rtf(){
+  document.getElementById('tc').innerHTML=TR.map((t,i)=>`
+  <div class="tlr">
+    <div class="tll">
+      <div class="tlw">${t.w}</div>
+      <div class="tld" style="background:${t.col}"></div>
+      ${i<TR.length-1?`<div class="tlln" style="background:${t.col}"></div>`:''}
+    </div>
+    <div class="tlc">
+      <div class="tlh" style="background:${t.bg};color:${t.tc}">${t.t}</div>
+      ${t.pts.map(p=>`<div class="tlp${p.hi?' hi':''}"><span style="flex-shrink:0">${p.hi?'◆':'◇'}</span><span>${p.txt}</span></div>`).join('')}
+    </div>
+  </div>`).join('');
+}
+
+function rzn(){
+  let h=`<div class="tw"><table style="table-layout:fixed"><thead><tr style="background:#12263A"><th style="width:38px">Zone</th><th style="width:120px">Nom</th><th style="width:95px">Vélo (% FTP)</th><th style="width:100px">CAP (% FC max)</th><th>Ressenti</th></tr></thead><tbody>`;
+  ZONES.forEach(z=>{h+=`<tr><td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${z.col};margin-right:5px;vertical-align:middle"></span><strong>${z.z}</strong></td><td>${z.n}</td><td>${z.v}</td><td>${z.c}</td><td style="font-size:11px">${z.r}</td></tr>`;});
+  h+=`</tbody></table></div><div class="note">Calibrage Zwift : effectuer le Ramp Test dès S1 — Workouts > FTP Tests > Ramp Test. Toutes les zones se règlent automatiquement.</div>`;
+  document.getElementById('zn').innerHTML=h;
+}
+
+function rad(){
+  document.getElementById('ac').innerHTML=AD.map(a=>`<div class="ai"><div class="at">Situation : ${a.t}</div><div class="aa">${a.a}</div></div>`).join('');
+}
+
+rw(1);rzw(1);rrf(1);rtf();rzn();rad();
+</script>
+
+</body>
+</html>
